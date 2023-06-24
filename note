@@ -1,0 +1,23 @@
+ssh-keygen -t ed25519 -C "adioblessa@gmail.com"
+git config --local --add core.sshCommand "ssh -i ~/Desktop/Code-project/python_api/key2"
+git config --local --list
+git config --local --unset core.sshCommand
+git branch savepath
+git checkout savepath
+git rebase savepath
+node --experimental-modules --es-module-specifier-resolution=node yourScript.js
+
+insatll babel for es6 to es5 transpilling
+npm install @babel/core @babel/preset-env --save-dev
+inside .babelrc file:
+{
+  "presets": ["@babel/preset-env"],
+  "plugins": ["@babel/plugin-transform-runtime"]
+}
+
+Note that starting from Babel 7, the .babelrc file has been deprecated in 
+favor of using the babel.config.json (or babel.config.js) file for configuration
+
+nino for chat
+redux toolkit for state   management
+redux query for query
