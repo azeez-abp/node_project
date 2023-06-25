@@ -4,7 +4,7 @@ import {createTheme} from '@mui/material/styles';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { themeSettings } from './theme/theme'
+import { themeSettings } from './theme/theme';
 import  Dashboard  from './scenes/dashboard/dashboard';
 import Layout from './scenes/layout/index';
 
@@ -20,8 +20,10 @@ function App() {
         <CssBaseline />
         <Routes>
            <Route  element={<Layout />}/>
+           {/* The Layout contains the outlet and Every Route below represent the children */}
            <Route path='/'  element = {<Navigate to={'dashboard'}  replace/>} />
            <Route path='/dashboard'  element = {<Dashboard />} />
+
         </Routes>
       </ThemeProvider>
       </BrowserRouter> 
