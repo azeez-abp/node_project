@@ -1,6 +1,6 @@
 import './App.css';
-import { CssBaseline,ThemeProvider } from '@mui/material';
-import {createTheme} from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
+import {createTheme,ThemeProvider} from '@mui/material/styles';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
@@ -19,11 +19,11 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Routes>
-           <Route  element={<Layout />}/>
+           <Route  element={<Layout />}>
            {/* The Layout contains the outlet and Every Route below represent the children */}
            <Route path='/'  element = {<Navigate to={'dashboard'}  replace/>} />
            <Route path='/dashboard'  element = {<Dashboard />} />
-
+          </Route>
         </Routes>
       </ThemeProvider>
       </BrowserRouter> 
