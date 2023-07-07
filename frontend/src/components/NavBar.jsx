@@ -1,19 +1,19 @@
 
-import React, { useState } from "react";
+import React from "react";
 import {
 LightModeOutlined,
 DarkModeOutlined,
 Menu as MenuIcon,
 Search,
-SettingsOutlined,
-ArrowDropDownOutlined,
+//SettingsOutlined,
+//ArrowDropDownOutlined,
 } from "@mui/icons-material";
 import FlexBetween from "./FlexBetween";
 import { useDispatch } from "react-redux";
 import {setMode} from './../state'
 //import profileImage from "assets/profile.jpeg"; 
-import { Toolbar, useTheme, IconButton, InputBase } from "@mui/material";
-import AppBar from '@mui/material/AppBar';
+import { Toolbar, useTheme, IconButton, InputBase,AppBar } from "@mui/material";
+//import AppBar from '@mui/material/AppBar';
 
 ////////////////////////////////////Left of Nav
 const LeftNav  = ({isSideBarOpen,setIsSideBarOpen})=>{
@@ -46,7 +46,7 @@ const LeftNav  = ({isSideBarOpen,setIsSideBarOpen})=>{
 const RightNav  = ()=>{
     const dispatch = useDispatch();
     const theme = useTheme();
-    console.log(setMode(),theme.palette)
+    //console.log(setMode(),theme.palette)
     return (
         <FlexBetween gap={"1.5rem"} >
           <IconButton 

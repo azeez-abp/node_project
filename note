@@ -21,3 +21,98 @@ favor of using the babel.config.json (or babel.config.js) file for configuration
 nino for chat
 redux toolkit for state   management
 redux query for query
+
+cd node_project/backend | npm run dev
+cd node_project/frontend | npm start
+
+
+
+
+
+createSlice and createAsyncThunk APIs
+
+createApi()
+fetchBaseQuery()
+baseQuery()
+
+ imposter syndrome is
+feeling of frauduent
+
+our ideas and skills are not worthy of other’s attention
+
+
+A nagging doubt that you haven’t really earned your accomplishment
+
+
+/////zworkin g with differnce session /////////////////////////////
+const MongoStore = require('connect-mongo');
+app.use(
+  session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: 'mongodb://localhost/myapp' }),
+  })
+);
+
+
+
+npm install session-file-store
+const FileStore = require('session-file-store')(session);
+app.use(
+  session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    store: new FileStore({
+      path: '/path/to/session/files',
+      encrypt: true,
+    }),
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+///////////////////////////////
+for mysql
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
+const mysql = require('mysql2');
+
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'your-username',
+  password: 'your-password',
+  database: 'your-database',
+});
+
+const sessionStore = new MySQLStore({
+  clearExpired: true,
+  checkExpirationInterval: 900000, // 15 minutes
+  expiration: 86400000, // 1 day
+  createDatabaseTable: true,
+  connection: connection,
+});
+
+
+app.use(
+  session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStore,
+  })
+);
+
+
+
+/////////////////working with differnce cookie//////////////
+app.get('/set-cookie', (req, res) => {
+  res.setHeader('Set-Cookie', 'cookieName=cookieValue; Path=/; Max-Age=3600');
+  res.send('Cookie set successfully');
+});
+
+
+
+

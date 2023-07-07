@@ -12,6 +12,8 @@ error_handler() {
 trap 'error_handler' ERR
 
 npm install express cors body-parser helmet mongoose morgan dotenv 
+npm install  passport passport-jwt jsonwebtoken  # Oauth login
+npm install express-session cookie-parser # to work with session and cookies
 
 if [ $? -ne 0 ]; then
     echo "Command 2 failed."

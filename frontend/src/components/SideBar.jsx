@@ -32,6 +32,8 @@ import {
  TodayOutlined,
  ArrowBack,
 
+
+
 } from "@mui/icons-material"
 
 import { useState,useEffect } from 'react'
@@ -131,6 +133,42 @@ function SideBar({drawerWidth,isSideBarOpen,setIsSideBarOpen,isDesktop})
     const lcText = text.toLocaleLowerCase()
 
    return (
+ 
+      <List key={key}>
+        <ListItem  sx={{
+                        cursor:"pointer", 
+                        backgroundColor:active===lcText?theme.palette.secondary[300] :"transparent",
+                        justifyContent: active===lcText? "space-between":"flex-start"
+                        }}  
+
+                        onClick={()=>{
+                           navigate(`/${lcText}`)
+                          setActive(lcText)
+                      }  
+                }   >
+
+               <IconButton 
+            sx={{
+                m:"-0.5rem 0rem 0rem 0rem;",
+                color:active===lcText
+                  ?theme.palette.primary[500]
+                  :theme.palette.secondary[200]
+                }}
+            >
+                 {icon!==null?icon:null}
+             </IconButton>  
+            <Typography>
+
+             {text}   
+             
+            
+            </Typography>
+            {active===lcText && ( <IconButton> <ChevronRightOutlined />  </IconButton>  )}
+        </ListItem>
+      </List>
+
+    ///////////////////////////////////////////////////////////////////
+    /*
         <Box key={key} 
           sx={{ display:"flex", }}
          >
@@ -173,7 +211,7 @@ function SideBar({drawerWidth,isSideBarOpen,setIsSideBarOpen,isDesktop})
             <Box>
             <Typography
              >{text}
-              {/* {active} */}
+             
             
              </Typography> 
             </Box>
@@ -187,7 +225,10 @@ function SideBar({drawerWidth,isSideBarOpen,setIsSideBarOpen,isDesktop})
              </Box>
         
            </Box>
-        </Box>) 
+        </Box>
+        */
+         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+        ) 
 
    } )
 
@@ -207,9 +248,9 @@ function SideBar({drawerWidth,isSideBarOpen,setIsSideBarOpen,isDesktop})
                 {
                   width: drawerWidth,
                   "& .MuiDrawer-paper":{
-                    color:theme.palette.secondary[2000],
+                    color:theme.palette.secondary[200],
                     boxSizing:"border-box",
-                    borderWidth:isDesktop?0:"2px",
+                    borderWidth:isDesktop?0:"2px", 
                     width: drawerWidth,
 
 

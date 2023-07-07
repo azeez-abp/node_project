@@ -6,11 +6,21 @@ import App from './App.js';
 import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux';
 import globalColorSlice from './state';///take the whole file
+import {api} from './state/api'
+import { setupListeners } from '@reduxjs/toolkit/dist/query';
+  
+
+
 const store= configureStore({
   reducer: {
-      global:globalColorSlice
-  }
+      global:globalColorSlice,
+      [api.reducerPath]:api.reducer,
+      
+  },
+  middleware: (getDefault) =>getDefault().concat(api.middleware)
 })
+
+setupListeners(store.dispatch) ///refresh on remount and onreconnect
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
