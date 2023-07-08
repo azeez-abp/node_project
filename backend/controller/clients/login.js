@@ -28,5 +28,5 @@ export const login   = async(req,res)=>{
       const {accessToken} = loginAuth(req, res, {id:login._id.valueOf()} ) 
       console.log(coder)
       ////use auth middlwware
-    res.status(200).json({ suc:true, accessToken:coder.encode( [accessToken] ,process.env.ACCESS_TOKEN , JSON.parse(atob(process.env.ACCESS_TOKEN_KEY))    )  })
+    res.status(200).json({ suc:true,a:accessToken, accessToken:coder.encode( [accessToken] ,process.env.ACCESS_TOKEN , JSON.parse(atob(process.env.ACCESS_TOKEN_KEY))    )  })
  }//3,4,2,0,1

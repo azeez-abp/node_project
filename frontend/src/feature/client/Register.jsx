@@ -241,36 +241,39 @@ export default function Register() {
       data.append(i, state[i])
     }
 
-   let hasRegister  = await  registerUserHandler(data)
 
-   console.log(hasRegister.error)
-   if(hasRegister.error){
+/////////////////////////////////////////////////////////////////////////////////
 
-     ///////////////////////
-        hasError(hasRegister.error.error)
-     //////////////////////
-
-    return;
-   }
-    
+try {
+   let hasRegister  = await  registerUserHandler(data)  
    if(hasRegister.data.err){
     hasError(hasRegister.data.err)
 
     return
     
    }
-   console.log(hasRegister.data.message )
-   const responseImage  =process.env.REACT_APP_BASE_URL +(hasRegister.data.message).match(/(?<=public).+/)[0]
-   console.log(responseImage)
-   setRespImg(responseImage)
-   setSuccess("Registration  completed, click Sign in button to login")
-   setRespImg("")
+    const responseImage  =process.env.REACT_APP_BASE_URL +(hasRegister.data.message).match(/(?<=public).+/)[0]
+     setRespImg(responseImage) 
+     setSuccess("Registration  completed, click Sign in button to login")
+     setRespImg("")
+     
    setTimeout(()=>{
-  setTimeout(setRespImg(responseImage),3000)
-    dispath(setIsLoading(false))
-   
-  },2000)
-   
+    setTimeout(setRespImg(responseImage),2000)
+     dispath(setIsLoading(false))
+   },2000)
+} catch (error) {
+  hasError(error.message)
+}
+
+
+    
+  
+   //console.log(hasRegister.data.message )
+  
+   //console.log(responseImage)
+  
+
+   ////////////////////////////////////////////////////////////////
     
   };
   

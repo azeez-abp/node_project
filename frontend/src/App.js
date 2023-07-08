@@ -16,7 +16,7 @@ import ResetPassword from './feature/client/ResetPassword';
 
 function App() {
 
-  const {mode,is404}  = useSelector((state)=>state.global) ///use selector contain all state inside dstore 
+  const {mode,is404,pageLoading}  = useSelector((state)=>state.global) ///use selector contain all state inside dstore 
   // reducer is a state spread into state object
   const theme  = useMemo(()=> createTheme(themeSettings(mode)), [mode]    )
   return ( 
@@ -24,6 +24,8 @@ function App() {
       <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+         {pageLoading  
+         ?(
         <Routes>
         <Route path='/'  element = {<Navigate to={'register'}  replace/>} />
            <Route path='/register'  element = {<Register />} />
@@ -39,6 +41,26 @@ function App() {
         {/* Outle route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+         )
+         :(
+          <div className='loader' 
+            style={{
+               display:"flex",
+               alignItems:"center",
+               justifyContent:"center",
+               witdth:"100%",
+               height:"100Vh"
+
+            }}
+          >
+           <div><p> Loading </p></div>
+         
+         
+         </div>
+         )
+         }
+
+
       </ThemeProvider>
       </BrowserRouter> 
      

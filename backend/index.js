@@ -59,6 +59,7 @@ app.use(morgan("common"))//Morgan is a popular logging middleware for Node.js ap
  app.use(passport.session())
  app.use(passport.initialize())
 
+
  app.use(cookieParser());
 app.use(cors())
 /* This middleware automatically handles the CORS-related HTTP headers and allows cross-origin requests to your application's routes.*/
@@ -132,7 +133,7 @@ app.use(express.static(path.join(__dirname,'/public')))
 
 /*SET MONGOOSE*/
 
-console.log(process.env.MONGO_URL, "is")
+//console.log(process.env.MONGO_URL, "is")
 
 
   

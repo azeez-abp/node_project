@@ -21,6 +21,8 @@ const NotFound = () => {
         display:'flex',
         alignItems:'center',
         justifyContent:'center',
+        witdth:"100%",
+        height:"100Vh"
 
     }}>
     <Box>

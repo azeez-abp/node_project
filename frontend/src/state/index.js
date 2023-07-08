@@ -4,6 +4,7 @@
  const initialState = {
     mode:"dark",
     isLoading: false,
+    pageLoading:true,
     error: null,
     hasLogin:false,
     is404:false,
@@ -30,6 +31,10 @@
        
          state.isLoading  = action.payload
     },
+    setPageLoading: (state,action)=>{
+       
+      state.pageLoading  = action.payload
+ },
     setWebToken: (state,action)=>{
      
       state.webToken  = action.payload
@@ -58,6 +63,7 @@
    setMode,
    setIs404,
    setIsLoading,
+   setPageLoading,
    setWebToken,
    registrationStart,
    registrationSuccess,
