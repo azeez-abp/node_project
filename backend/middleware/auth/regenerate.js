@@ -1,43 +1,38 @@
 import jwt from 'jsonwebtoken';
-
-
-
-
-
-
-
-
-
-
-
+import { resign } from './authSign.js';
 
 
 
 const checkCookieHasExpred  =  (req, res) => {
     // Retrieve the value of the "cookieName" cookie from the request
-    const cookieValue = req.cookies.cookieName;
-  
+    const cookieValue = req.cookies[process.env.COOKIE_NAME];
+    
     // Check if the cookie exists and has not expired
     if (cookieValue) {
       // Retrieve the expiration time of the cookie
-      const cookieExpiration = new Date(req.cookies.cookieName.expires);
+      const decodedToken = jwt.decode(cookieValue);
+     // console.log(cookieValue , "COOKIE",process.env.COOKIE_NAME,cookieValue,decodedToken)
+      const currentTime = Math.floor(Date.now() / 1000); // Convert current time to seconds
+      const cookieExpireTime   = decodedToken.exp
+      const remainingTime = cookieExpireTime - currentTime;
   
-      // Get the current time
-      const currentTime = new Date();
-  
+       
+      console.log(currentTime , "COOKIE",remainingTime,decodedToken.exp)
       // Compare the expiration time with the current time
-      if (cookieExpiration > currentTime) {
+      if (remainingTime > 0 ) {
         // Cookie has not expired
         //res.send('Cookie is valid');
+       
         return false
-      } else {
+      } else { 
+       
         // Cookie has expired
         return true
        // res.send('Cookie has expired');
       }
     } else {
       // Cookie does not exist
-      res.send('Cookie does not exist');
+    //  res.send('Cookie does not exist');
       return true
     }
   }
@@ -51,7 +46,7 @@ if(!authValue) return res.sendStatus(401)
 let token = authValue.split(" ")[1];
 
 const decodedToken = jwt.decode(token);
-const authTokenCookie = req.cookies.authToken;
+
 
 if (decodedToken) {
   const currentTime = Math.floor(Date.now() / 1000); // Convert current time to seconds
@@ -62,19 +57,22 @@ if (decodedToken) {
     const expirationTime = decodedToken.exp;
     // Calculate the remaining time in seconds
     const remainingTime = expirationTime - currentTime;
+    console.log(remainingTime, "REMAIN TIME")
+    if(remainingTime >1 ) return res.status(200).json({suc:"Active session"}) 
     if(remainingTime < 1 && checkCookieHasExpred(req,res)) return res.json({err:"Session has expired"})
     if(remainingTime < 1 && !checkCookieHasExpred(req,res)) {
         ///regenerare token
+        resign(req,res,{id:req.user._id.valueOf()})
     }
      
 
 
-    console.log('Time remaining (in seconds):', remainingTime);
+    //console.log('Time remaining (in seconds):', remainingTime);
   } else {
-    console.log('Token does not have an expiration time');
+    //console.log('Token does not have an expiration time');
   }
 } else {
   console.log('Invalid token');
 }
-
+next()
 }

@@ -8,7 +8,7 @@ let option  = {
     expiresIn: '10m',
     algorithm:'HS256' 
   }
-  console.log(process.env.ACCESS_TOKEN, process.env.REFRESH_TOKEN)
+ // console.log(process.env.ACCESS_TOKEN, process.env.REFRESH_TOKEN)
 const accessToken  = jwt.sign(payload, secrete?secrete:process.env.ACCESS_TOKEN, option)
 
   // refreshToken  into cookie
@@ -19,14 +19,24 @@ const accessToken  = jwt.sign(payload, secrete?secrete:process.env.ACCESS_TOKEN,
   const refreshToken  = jwt.sign(payload,secrete?secrete:process.env.REFRESH_TOKEN,optio2)
 
   let max_age  = 24*60*60*1000*15
-  res.cookie('webAPP', refreshToken, { maxAge: max_age, httpOnly: true });
+  res.cookie(process.env.COOKIE_NAME, refreshToken, { maxAge: max_age, httpOnly: true });
   req.session.user  = payload   ///if you want the user to be in session
 
   return {accessToken,refreshToken}
   
 }
 
+export const resign  = (req,res,payload,secrete=null)=>{
+  let option  = { 
+    expiresIn: '10m',
+    algorithm:'HS256' 
+  }
+const accessToken  = jwt.sign(payload, secrete?secrete:process.env.ACCESS_TOKEN, option)
+req.headers.authorization  = `Bearer ${accessToken}`
+req.headers.Authorization = `Bearer ${accessToken}`
 
+
+}  
 
 /*
 In a React application, the best method to manage JSON Web Tokens (JWTs) is to store them securely in the client-side application and send them with each request to the server for authentication and authorization. Here are some recommended approaches to manage JWTs in React:
