@@ -24,7 +24,7 @@ function App() {
       <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-         {pageLoading  
+         {!pageLoading  
          ?(
         <Routes>
         <Route path='/'  element = {<Navigate to={'register'}  replace/>} />

@@ -1,3 +1,4 @@
 export const getUserProfile  = (req,res)=>{
-   res.json({data:req.user})
+   //console.log(req.user, "USER")
+  return  res.json({data:req.user})
 }

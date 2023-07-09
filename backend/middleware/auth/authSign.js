@@ -19,7 +19,7 @@ const accessToken  = jwt.sign(payload, secrete?secrete:process.env.ACCESS_TOKEN,
   const refreshToken  = jwt.sign(payload,secrete?secrete:process.env.REFRESH_TOKEN,optio2)
 
   let max_age  = 24*60*60*1000*15
-  res.cookie(process.env.COOKIE_NAME, refreshToken, { maxAge: max_age, httpOnly: true });
+  res.cookie(process.env.COOKIE_NAME, refreshToken, { maxAge: max_age, httpOnly: true,secure:false,signed:false });
   req.session.user  = payload   ///if you want the user to be in session
 
   return {accessToken,refreshToken}

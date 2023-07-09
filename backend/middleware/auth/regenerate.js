@@ -6,7 +6,7 @@ import { resign } from './authSign.js';
 const checkCookieHasExpred  =  (req, res) => {
     // Retrieve the value of the "cookieName" cookie from the request
     const cookieValue = req.cookies[process.env.COOKIE_NAME];
-    
+    console.log(cookieValue , "COOKIE")
     // Check if the cookie exists and has not expired
     if (cookieValue) {
       // Retrieve the expiration time of the cookie
@@ -57,8 +57,10 @@ if (decodedToken) {
     const expirationTime = decodedToken.exp;
     // Calculate the remaining time in seconds
     const remainingTime = expirationTime - currentTime;
-    console.log(remainingTime, "REMAIN TIME")
-    if(remainingTime >1 ) return res.status(200).json({suc:"Active session"}) 
+   // console.log(remainingTime, "REMAIN TIME")
+    if(remainingTime >1 ) {
+      return next()
+    }
     if(remainingTime < 1 && checkCookieHasExpred(req,res)) return res.json({err:"Session has expired"})
     if(remainingTime < 1 && !checkCookieHasExpred(req,res)) {
         ///regenerare token
@@ -72,7 +74,7 @@ if (decodedToken) {
     //console.log('Token does not have an expiration time');
   }
 } else {
-  console.log('Invalid token');
+  //console.log('Invalid token');
 }
 next()
 }

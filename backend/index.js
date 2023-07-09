@@ -30,6 +30,47 @@ const PORT  = process.env.PORT || 9292
 /*CONFIGURSTION*/
 dotenv.config()
 const app  = express()
+
+let whitelist= [
+  'http://127.0.0.1:'+PORT,
+  'https://127.0.0.1:'+PORT,
+  '127.0.0.1:'+PORT,///this the the one
+  '127.0.0.1:3000',///this the the one
+  'localhost:'+PORT
+  //undefined
+  ]
+var corsOptions = {
+  origin: function (origin, callback) {
+    //  console.log(origin, "ORIGIN")
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS '+origin))
+    }
+  },
+  optionSuccessStatus:200,
+  credentials: true,
+}
+
+
+let corsOptionsDelegate  = function (req, callback) {
+  var corsOptions;
+ // console.log(req.headers['host'],"tyu")
+ //req.hostname,127.0.0.1 
+  
+  if (whitelist.indexOf(req.headers.host) !== -1) {
+  /// corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+  } else {
+      //console.log(req.header('Origin'))
+
+    //  console.log(req.headers )
+    throw new Error("Rejection by cors")
+    //corsOptions = { origin: false } // disable CORS for this request
+  }
+  callback(null, corsOptions) // callback expects two parameters: error and options
+
+}
+app.use(cors(corsOptionsDelegate));
 app.use(express.json())
 /*express.json() middleware to parse incoming requests with a JSON payload.
  This middleware automatically parses the request body if the Content-Type 
@@ -61,7 +102,8 @@ app.use(morgan("common"))//Morgan is a popular logging middleware for Node.js ap
 
 
  app.use(cookieParser());
-app.use(cors())
+ 
+//app.use(cors())
 /* This middleware automatically handles the CORS-related HTTP headers and allows cross-origin requests to your application's routes.*/
 //app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.urlencoded({ extended: true }) )  
@@ -77,48 +119,15 @@ query string parser. This means that the parsed URL-encoded data will be represe
 
  //  res.cookie('user', user.id, { maxAge: 3600000, httpOnly: true });
 
- let whitelist= [
-    'http://127.0.0.1:'+PORT,
-    'https://127.0.0.1:'+PORT,
-    '127.0.0.1:'+PORT,///this the the one
-    'localhost:'+PORT
-    //undefined
-    ]
-var corsOptions = {
-    origin: function (origin, callback) {
-      //  console.log(origin, "ORIGIN")
-      if (whitelist.indexOf(origin) !== -1) {
-        callback(null, true)
-      } else {
-        callback(new Error('Not allowed by CORS '+origin))
-      }
-    },
-    optionSuccessStatus:200
-  }
-  
-  let corsOptionsDelegate  = function (req, callback) {
-    var corsOptions;
-   // console.log(req.headers['host'],"tyu")
-   //req.hostname,127.0.0.1 
-    
-    if (whitelist.indexOf(req.headers.host) !== -1) {
-    /// corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
-    } else {
-        //console.log(req.header('Origin'))
-
-      //  console.log(req.headers )
-      throw new Error("Rejection by cors")
-      //corsOptions = { origin: false } // disable CORS for this request
-    }
-    callback(null, corsOptions) // callback expects two parameters: error and options
-  
-  }
-
 app.set('trust proxy', true)// use req.ip to get ip
 
-app.use(cors(corsOptionsDelegate));
+
 console.log(path.join(__dirname,'/public'))
 app.use(express.static(path.join(__dirname,'/public')))
+app.use((req, res, next) => {
+  res.header('X-XSS-Protection', '1');
+  next();
+});
 //  const upl  =  new FileUploader(app,'./public/images',1200000,500000,500000,['png','jpg','gif','webp'])
 //  upl.getFileAndUpload('/fileloader','img',true,[200,400], (req,res,images)=>{
  

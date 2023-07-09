@@ -4,7 +4,7 @@
  const initialState = {
     mode:"dark",
     isLoading: false,
-    pageLoading:true,
+    pageLoading:false,
     error: null,
     hasLogin:false,
     is404:false,

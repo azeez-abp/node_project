@@ -11,10 +11,28 @@ let token  = localStorage.getItem("APP_ACCESS_TOKEN")? crypto.decode( JSON.parse
   put |delete for a data change =>mutation =>invalidateTag i.e when this is done get request will be called automatically
 
 */
+console.log(token)
 
 export  const api  = createApi({
 
-    baseQuery:fetchBaseQuery({ baseUrl:process.env.REACT_APP_BASE_URL }),
+    baseQuery:fetchBaseQuery({ 
+        baseUrl:process.env.REACT_APP_BASE_URL,
+        prepareHeaders: (headers, { getState, endpoint }) => {
+            const state = getState()
+            console.log(state,"STATE")
+           //  headers.set("Access-Control-Allow-Origin","*") 
+            // headers.set("Access-Control-Allow-Credentials","true")
+            if (token) {
+                headers.set('Authorization', `Bearer ${token}`)
+            }else{
+                headers.delete('Authorization')
+            }
+            return headers
+        },
+      //   credentials: 'include', 
+    
+    }),
+  // This allows server to set cookies
     reducerPath:"adminAPi",//name of the slice
     tagTypes:['GeneralUser','ClientsProfile'],///route for get ie query
     endpoints: (builder)=>({
@@ -58,6 +76,7 @@ export  const api  = createApi({
                    /*Fro manual cache update, no need for providesTags you need to prorive asyc onQueryStarted function check it on REDUX page */
                 headers: {
                     Authorization: `Bearer ${token}`,
+                    AppName:"WEB APPLICATON"
                   },
             
                   
