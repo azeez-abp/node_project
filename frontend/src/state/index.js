@@ -9,9 +9,11 @@
     hasLogin:false,
     is404:false,
     webToken:null,
+    currentUser:null,
+    errorMessage:''
  } 
 
- /*
+ /* 
  createSlice return both action and reduce 
  console.dir(createSlice)
  */
@@ -32,13 +34,23 @@
          state.isLoading  = action.payload
     },
     setPageLoading: (state,action)=>{
-       
+         
       state.pageLoading  = action.payload
  },
-    setWebToken: (state,action)=>{
-     
+   setWebToken: (state,action)=>{
+       
       state.webToken  = action.payload
  },
+  setCurrentUser: (state,action)=>{
+     
+  state.currentUser  = action.payload
+},
+
+setErrorMessage: (state,action)=>{
+     
+  state.errorMessage = action.payload
+},
+
     registrationStart: (state) => {
       state.loading = true;
       state.error = null;
@@ -52,7 +64,7 @@
     },
 
     setHasLogin:(value)=>{
-      console.log(value)
+      
     }
 }  
  })
@@ -65,6 +77,7 @@
    setIsLoading,
    setPageLoading,
    setWebToken,
+   setCurrentUser,
    registrationStart,
    registrationSuccess,
    registrationFailure,

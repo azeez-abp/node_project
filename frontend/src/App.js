@@ -13,12 +13,15 @@ import NotFound from './components/NotFound';
 import Login from './feature/client/Login';
 import ForgetPassword from './feature/client/ForgetPassword';
 import ResetPassword from './feature/client/ResetPassword';
+import PageLoading from './feature/client/PageLoading';
 
 function App() {
 
-  const {mode,is404,pageLoading}  = useSelector((state)=>state.global) ///use selector contain all state inside dstore 
+  const {mode,is404,pageLoading,errorMessage}  = useSelector((state)=>state.global) ///use selector contain all state inside dstore 
+  //
   // reducer is a state spread into state object
-  const theme  = useMemo(()=> createTheme(themeSettings(mode)), [mode]    )
+//  
+  const theme  = useMemo(()=> createTheme(themeSettings(mode))  )
   return ( 
     <div className="app">
       <BrowserRouter>
@@ -27,7 +30,7 @@ function App() {
          {!pageLoading  
          ?(
         <Routes>
-        <Route path='/'  element = {<Navigate to={'register'}  replace/>} />
+        <Route path='/'  element = {<Navigate to={'login'}  replace/>} />
            <Route path='/register'  element = {<Register />} />
 
             <Route path='/login' element={<Login />}   />
@@ -43,20 +46,7 @@ function App() {
         </Routes>
          )
          :(
-          <div className='loader' 
-            style={{
-               display:"flex",
-               alignItems:"center",
-               justifyContent:"center",
-               witdth:"100%",
-               height:"100Vh"
-
-            }}
-          >
-           <div><p> Loading </p></div>
-         
-         
-         </div>
+          <PageLoading />
          )
          }
 

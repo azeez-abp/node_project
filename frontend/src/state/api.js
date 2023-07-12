@@ -1,7 +1,7 @@
 import {createApi,fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 import { crypto } from "../lib/crypto";
 let token  = localStorage.getItem("APP_ACCESS_TOKEN")? crypto.decode( JSON.parse(localStorage.getItem("APP_ACCESS_TOKEN")),process.env.REACT_APP_ACCESS_TOKEN, JSON.parse(atob('WzMsNCwyLDAsMV0='))   ) :null
-//console.log(token,process.env.REACT_APP_ACCESS_TOKEN)
+//
 //provideTage in query
 // invalidatetahe in mutation
 
@@ -11,7 +11,7 @@ let token  = localStorage.getItem("APP_ACCESS_TOKEN")? crypto.decode( JSON.parse
   put |delete for a data change =>mutation =>invalidateTag i.e when this is done get request will be called automatically
 
 */
-console.log(token)
+
 
 export  const api  = createApi({
 
@@ -19,17 +19,18 @@ export  const api  = createApi({
         baseUrl:process.env.REACT_APP_BASE_URL,
         prepareHeaders: (headers, { getState, endpoint }) => {
             const state = getState()
-            console.log(state,"STATE")
-           //  headers.set("Access-Control-Allow-Origin","*") 
-            // headers.set("Access-Control-Allow-Credentials","true")
+            
+             // headers.set("Access-Control-Allow-Origin",process.env.REACT_APP_BASE_URL) 
+             headers.set("Access-Control-Allow-Credentials","true")
             if (token) {
-                headers.set('Authorization', `Bearer ${token}`)
+              
+               headers.set('Authorization', `Bearer ${token}`)
             }else{
                 headers.delete('Authorization')
             }
             return headers
         },
-      //   credentials: 'include', 
+         credentials: 'include', 
     
     }),
   // This allows server to set cookies
@@ -54,7 +55,7 @@ export  const api  = createApi({
             
        loginUser: builder.mutation({
                 query: initialPost =>{
-                    console.log(initialPost, "INITIAL PSOT")
+                    
                        return ({
                         url: '/client/login',
                         method: 'POST',

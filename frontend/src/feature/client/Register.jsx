@@ -246,6 +246,10 @@ export default function Register() {
 
 try {
    let hasRegister  = await  registerUserHandler(data)  
+   if(hasRegister.error){
+    return hasError(hasRegister.error.error)
+   }
+   console.log(hasRegister )
    if(hasRegister.data.err){
     hasError(hasRegister.data.err)
 
@@ -258,9 +262,21 @@ try {
      setRespImg("")
      
    setTimeout(()=>{
+   
     setTimeout(setRespImg(responseImage),2000)
+    setRespImg("image")
      dispath(setIsLoading(false))
    },2000)
+
+    
+ 
+    setTimeout(()=>{
+      //console.log(responseImage)
+      setRespImg(responseImage)
+    },4000)
+     //dispath(setIsLoading(false))
+
+
 } catch (error) {
   hasError(error.message)
 }

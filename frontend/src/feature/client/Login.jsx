@@ -13,7 +13,7 @@ import Container from '@mui/material/Container';
 import Logo from '../../components/Logo';
 import { VisibilityOffOutlined, VisibilityOutlined } from '@mui/icons-material';
 import { useSelector,useDispatch } from 'react-redux';
-import { setIsLoading,setWebToken } from '../../state';
+import { setIsLoading,setWebToken,setCurrentUser } from '../../state';
 import { useNavigate } from 'react-router-dom';
 
 import { 
@@ -72,34 +72,47 @@ export default function Login() {
   }
 
   const handleSubmit =async (event) => {
-
+      console.log(event.currentTarget)
     event.preventDefault();
     dispath(setIsLoading(true))
+
     const data = new FormData(event.currentTarget);
-    if(!data.get('email')){
+    console.log(data,  data.get('email').length)
+    if(data.get('email').length === 0){
      return hasError("Email is required")
     }
    
-    if(!data.get('password')){
+    if(data.get('password').length === 0 ){
      return hasError("Password is required")
     }
    
-     const login   = await loginHandler({
-      email: data.get('email'),
-      password: data.get('password'),
-      remember: data.get('remember'),
-    })
-      
-     if(login.error){
-     return hasError(login.error.data.err)
-     }
+   
      //console.log( process.env.REACT_APP_BASE_URL, process.env.REACT_APP_ACCESS_TOKEN,process.env.REACT_APP_ACCESS_TOKEN_KEY )
      try {
      
+      const login   = await loginHandler({
+        email: data.get('email'),
+        password: data.get('password'),
+        remember: data.get('remember'),
+      })
+       // console.log(login.error.data )
+       if(login.error){
+          if(login.error.data)  return hasError(login.error.data.err)
+        return hasError(login.error.error)
+       }
+       
+
+       if(login.data.err){
+        return hasError(login.error.data.err)
+        }
       //JSON.parse(atob(process.env.REACT_APP_ACCESS_TOKEN_KEY))
      //let out= crypto.decode(login.data.accessToken,process.env.REACT_APP_ACCESS_TOKEN,JSON.parse(atob('WzMsNCwyLDAsMV0='))  )
      ///save the encrypted token in storage
+   
+     dispath(setCurrentUser(login.data.user))
      localStorage.setItem("APP_ACCESS_TOKEN",JSON.stringify(login.data.accessToken) ) 
+  
+
   ///   console.log(out)
      hasSuccess("Login done")
      dispath(setWebToken(login.data.accessToken))
@@ -109,7 +122,7 @@ export default function Login() {
      }, 2000);
       
      } catch (error) {
-        console.log(error.message)
+        console.log(error.message,error)
         hasError(error.message)
      }
      

@@ -14,19 +14,20 @@ import * as express_session from 'express-session'
 import { sessionMiddleware } from './middleware/session/session.js'
 import MongoDBStore from 'connect-mongodb-session';
 import session from 'express-session'
-const MongoDBStoreSession = MongoDBStore(session);
+
 import cookieParser from 'cookie-parser';
 
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 import clientRoute from './route/client.js'
 import generalRoute from './route/general.js'
 import managementRoute from './route/management.js'
 import saleRoute from './route/sales.js'
+const mongo_url  = process.env.MONGO_LOCAL
 const PORT  = process.env.PORT || 9292
+const MongoDBStoreSession = MongoDBStore(session);
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 /*CONFIGURSTION*/
 dotenv.config()
 const app  = express()
@@ -35,13 +36,13 @@ let whitelist= [
   'http://127.0.0.1:'+PORT,
   'https://127.0.0.1:'+PORT,
   '127.0.0.1:'+PORT,///this the the one
-  '127.0.0.1:3000',///this the the one
+  '127.0.0.1:3000/',///this the the one
   'localhost:'+PORT
   //undefined
   ]
 var corsOptions = {
   origin: function (origin, callback) {
-    //  console.log(origin, "ORIGIN")
+    //  
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true)
     } else {
@@ -55,22 +56,28 @@ var corsOptions = {
 
 let corsOptionsDelegate  = function (req, callback) {
   var corsOptions;
- // console.log(req.headers['host'],"tyu")
+ // 
  //req.hostname,127.0.0.1 
   
-  if (whitelist.indexOf(req.headers.host) !== -1) {
-  /// corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+  if (whitelist.indexOf(req.headers.host) !== - 1 || whitelist.indexOf(req.headers.referer)) {
+    
+    corsOptions = { origin: true,credentials:true } // reflect (enable) the requested origin in the CORS response
   } else {
-      //console.log(req.header('Origin'))
+      //
 
-    //  console.log(req.headers )
+    //  
     throw new Error("Rejection by cors")
     //corsOptions = { origin: false } // disable CORS for this request
   }
   callback(null, corsOptions) // callback expects two parameters: error and options
 
 }
+//app.use(cors({ origin: true,credentials:true }));
 app.use(cors(corsOptionsDelegate));
+// app.use(cors({
+//   credentials: true,
+//   origin: 'http://localhost:3000',
+// }));
 app.use(express.json())
 /*express.json() middleware to parse incoming requests with a JSON payload.
  This middleware automatically parses the request body if the Content-Type 
@@ -93,16 +100,14 @@ app.use(morgan("common"))//Morgan is a popular logging middleware for Node.js ap
   resave: false,
   saveUninitialized: false,
   store:  new MongoDBStoreSession({
-  uri: process.env.MONGO_URL,
+  uri: mongo_url,
   collection: 'sessions', /// will  create collection sessions
 })
 })  );
  app.use(passport.session())
  app.use(passport.initialize())
+ app.use(cookieParser("abpsingnature"))
 
-
- app.use(cookieParser());
- 
 //app.use(cors())
 /* This middleware automatically handles the CORS-related HTTP headers and allows cross-origin requests to your application's routes.*/
 //app.use(bodyParser.urlencoded({extended:false}))
@@ -122,10 +127,11 @@ query string parser. This means that the parsed URL-encoded data will be represe
 app.set('trust proxy', true)// use req.ip to get ip
 
 
-console.log(path.join(__dirname,'/public'))
+
 app.use(express.static(path.join(__dirname,'/public')))
 app.use((req, res, next) => {
-  res.header('X-XSS-Protection', '1');
+   
+ // res.header('X-XSS-Protection', '1');
   next();
 });
 //  const upl  =  new FileUploader(app,'./public/images',1200000,500000,500000,['png','jpg','gif','webp'])
@@ -142,16 +148,17 @@ app.use((req, res, next) => {
 
 /*SET MONGOOSE*/
 
-//console.log(process.env.MONGO_URL, "is")
+//
 
 
   
 let hasNotConnected  = true;
 var conuntime  = 0
-while(hasNotConnected){
 
+while(hasNotConnected){
+   
     async function connects(){
-        await   mongoose.connect(process.env.MONGO_URL,{
+        await   mongoose.connect(mongo_url,{
             useNewUrlParser:true,
             useUnifiedTopology:true
         })
@@ -159,15 +166,15 @@ while(hasNotConnected){
 
    try { 
      connects()
-    app.listen(PORT,()=>console.log(`http://127.0.0.1:${PORT} started`))
+     app.listen(PORT,()=>console.log(`http://127.0.0.1:${PORT} started`))
     hasNotConnected  = false
     break
    } catch (error) {
-    console.log(`${error} not connect`) 
+    
     hasNotConnected++
-    console.log(hasNotConnected)
+    
     if(hasNotConnected===10){
-     console.log(`${error} not connect, Maximum try exceeded`) 
+     
      break
     }
    }

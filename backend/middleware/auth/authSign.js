@@ -8,7 +8,7 @@ let option  = {
     expiresIn: '10m',
     algorithm:'HS256' 
   }
- // console.log(process.env.ACCESS_TOKEN, process.env.REFRESH_TOKEN)
+ // 
 const accessToken  = jwt.sign(payload, secrete?secrete:process.env.ACCESS_TOKEN, option)
 
   // refreshToken  into cookie
@@ -19,7 +19,18 @@ const accessToken  = jwt.sign(payload, secrete?secrete:process.env.ACCESS_TOKEN,
   const refreshToken  = jwt.sign(payload,secrete?secrete:process.env.REFRESH_TOKEN,optio2)
 
   let max_age  = 24*60*60*1000*15
-  res.cookie(process.env.COOKIE_NAME, refreshToken, { maxAge: max_age, httpOnly: true,secure:false,signed:false });
+  // res.cookie(process.env.COOKIE_NAME, refreshToken, { maxAge: max_age,
+  //   // httpOnly: ,secure:false,signed:false
+  //  });
+   res.cookie(process.env.COOKIE_NAME,refreshToken, { 
+    domain:'',
+    maxAge: max_age,
+    httpOnly:true ,
+    signed:true ,
+    sameSite:'None',// "strict",// 'lax  | None'
+    secure: true
+  });
+
   req.session.user  = payload   ///if you want the user to be in session
 
   return {accessToken,refreshToken}
