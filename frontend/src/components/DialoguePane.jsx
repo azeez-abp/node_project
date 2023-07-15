@@ -30,7 +30,7 @@ const style = {
 export default function DialoguePane({dialogue}) {
 
   const dispatch = useDispatch()
-  const   {open,  close,callback ,text }      = dialogue  
+  const   {open ,text }      = dialogue  
   //const [open, setOpen] = React.useState(true);
 
   const handleCallCallback = () => dispatch(setDialogue({...dialogue,callback:true}))

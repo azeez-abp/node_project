@@ -8,13 +8,13 @@ Search,
 //SettingsOutlined,
 //ArrowDropDownOutlined,
 } from "@mui/icons-material";
-import FlexBetween from "./FlexBetween";
+import FlexBetween from "../../components/FlexBetween";
 import { useDispatch ,useSelector} from "react-redux";
-import {setMode,setDialogue} from './../state'
+import {setMode,setDialogue} from '../../state'
 //import profileImage from "assets/profile.jpeg"; 
 import { Toolbar, useTheme, IconButton, InputBase,AppBar,Menu,Button,MenuItem,Avatar} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useUserLogoutMutation} from "../state/api";
+import { useUserLogoutMutation} from "../../state/api";
 //import AppBar from '@mui/material/AppBar';
 
 ////////////////////////////////////Left of Nav
@@ -49,7 +49,7 @@ const RightNav  = ()=>{
 
     const dispatch = useDispatch();
     const {currentUser,dialogue}  = useSelector((state)=>state.global)
-    const callback  = dialogue.callback
+  
     const navigate  = useNavigate()
 
     const theme = useTheme();
@@ -90,7 +90,7 @@ const RightNav  = ()=>{
       if(dialogue.callback){
         handleLogouts ()
       }
-    },[callback])
+    },[dialogue.callback])
 
     const logout  = ()=>{
 

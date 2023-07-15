@@ -7,6 +7,7 @@ import { destroyCookie } from "../cookie/destroyCookie.js";
        // console.log(process.env.COOKIE_NAME)
        // res.clearCookie(process.env.COOKIE_NAME); // Clear the JWT token cookie
         destroyCookie(res,process.env.COOKIE_NAME )
+        
        // delete req.headers.Authorization;
         if(req.headers.Authorization) {
          delete req.headers.Authorization;

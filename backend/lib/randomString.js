@@ -9,8 +9,8 @@ export const randomStr =  (length,include_spacial_char=false,random_lenght=false
      let characters       =number_only? (`0123456789`): (`ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789${include_spacial_char?spacials:''}`);
      let charactersLength = characters.length;
      for ( var i = 0; i < length; i++ ) {
-       result += characters.charAt(Math.floor(Math.random() * 
-  charactersLength));
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        
     }
     return result;
  }

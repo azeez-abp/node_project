@@ -38,8 +38,8 @@ import {
 
 import { useState,useEffect } from 'react'
 import { useLocation,useNavigate } from 'react-router-dom'
-import FlexBetween from './FlexBetween'
-import profileImage from './../images/az.jpeg'
+import FlexBetween from '../../components/FlexBetween'
+//import profileImage from './../../images/az.jpeg'
 
 function SideBar({drawerWidth,isSideBarOpen,setIsSideBarOpen,isDesktop})
  {
@@ -167,68 +167,7 @@ function SideBar({drawerWidth,isSideBarOpen,setIsSideBarOpen,isDesktop})
         </ListItem>
       </List>
 
-    ///////////////////////////////////////////////////////////////////
-    /*
-        <Box key={key} 
-          sx={{ display:"flex", }}
-         >
-           <Box 
-           sx={{
-            display:"flex",
-           flexDirection:"row",
-            m:"0.5rem 0;",
-           cursor:"pointer",
-           flexWrap:"nowrap" ,
-           alignItems:"center" ,
-           padding:"0.4rem",
-          // justifyContent:"space-evenly"
-           backgroundColor:active===lcText?theme.palette.secondary[300]:"transparent",
-           color:active===lcText?theme.palette.primary[600]:theme.palette.secondary[200],
-           width:"100%"
-           
-            }}  
-           onClick={()=>{ navigate(`/${lcText}`)
-                          setActive(lcText)
-                      }  
-                }   
-           >
-           <Box>
-           <IconButton 
-            sx={{
-                m:"-0.5rem 0rem 0rem 0rem;",
-                color:active===lcText
-                  ?theme.palette.primary[500]
-                  :theme.palette.secondary[200]
-                }}
-
-           
-            
-            >
-                 {icon!==null?icon:null}
-             </IconButton>
-           </Box>
-
-            <Box>
-            <Typography
-             >{text}
-             
-            
-             </Typography> 
-            </Box>
-            
-             <Box sx={{m:"0 4 .4rem"}}>
-                    {active===lcText && (
-                <IconButton> <ChevronRightOutlined />  </IconButton>
-                
-                                        
-                            )}
-             </Box>
-        
-           </Box>
-        </Box>
-        */
-         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
-        ) 
+ ) 
 
    } )
 

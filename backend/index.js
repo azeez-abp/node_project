@@ -14,10 +14,7 @@ import * as express_session from 'express-session'
 import { sessionMiddleware } from './middleware/session/session.js'
 import MongoDBStore from 'connect-mongodb-session';
 import session from 'express-session'
-
 import cookieParser from 'cookie-parser';
-
-
 import clientRoute from './route/client.js'
 import generalRoute from './route/general.js'
 import managementRoute from './route/management.js'

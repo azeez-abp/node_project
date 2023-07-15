@@ -1,15 +1,15 @@
 import React,{useState} from 'react'
 import { Box,useMediaQuery } from '@mui/material'
 import { Outlet } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import NavBar from '../../components/NavBar'
-import SideBar from '../../components/SideBar'
 
-function getMinScreenWidth() {
-  var scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-  var minScreenWidth = window.innerWidth - scrollbarWidth;
-  return minScreenWidth;
-}
+import NavBar from '../../feature/client/NavBar'
+import SideBar from '../../feature/client/SideBar'
+
+// function getMinScreenWidth() {
+//   var scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+//   var minScreenWidth = window.innerWidth - scrollbarWidth;
+//   return minScreenWidth;
+// }
 function Layout() {
   const isDesktop = useMediaQuery('(min-width:600px)');
   //console.log(isDesktop,getMinScreenWidth())
