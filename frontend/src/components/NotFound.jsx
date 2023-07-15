@@ -2,16 +2,16 @@ import React, { useEffect } from 'react';
 import {useNavigate } from 'react-router-dom';
 import { Box, Typography, Button } from '@mui/material';
 import { setIs404 } from '../state';
-import { useDispatch ,useSelector} from 'react-redux';
+import { useDispatch} from 'react-redux';
 import { useUserProfileQuery, } from '../state/api'
-import { setCurrentUser, setIsLoading,setPageLoading } from '../state'
+//import { setCurrentUser, setIsLoading,setPageLoading } from '../state'
 
 const NotFound = () => {
 
   const navigate= useNavigate();
   const dispatch   = useDispatch()
  console.log(useUserProfileQuery())
- const {data,isError,isSuccess}  = useUserProfileQuery()
+ //const {data,isError,isSuccess}  = useUserProfileQuery()
 
   const handleGoBack = () => {
     dispatch(setIs404(false))
@@ -19,7 +19,6 @@ const NotFound = () => {
   };
 
   useEffect(()=>{
-    console.log(data)
    //dispatch(setIs404(true))
   },[])
   return (

@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 
 import Button from '@mui/material/Button';
 
@@ -13,7 +13,7 @@ import Container from '@mui/material/Container';
 import Logo from '../../components/Logo';
 import { VisibilityOffOutlined, VisibilityOutlined } from '@mui/icons-material';
 import { useSelector,useDispatch } from 'react-redux';
-import { setIsLoading,setWebToken,setCurrentUser } from '../../state';
+import { setIsLoading,setWebToken,setCurrentUser,setPageLoading } from '../../state';
 import { useNavigate } from 'react-router-dom';
 
 import { 
@@ -34,14 +34,13 @@ const {decode: atob, encode: btoa} = pkg;
 export default function Login() {
   //console.log(btoa(JSON.stringify([3,4,2,0,1])))
 
-  const isLoading  = useSelector((state)=>state.global.isLoading)
+  const {isLoading,pageLoading}  = useSelector((state)=>state.global)
   const dispath    = useDispatch()
   const [passwordHidden,setPasswordHidden] = useState(true)
   const [error,setError] = useState("")
   const [success,setSuccess]   = useState("")
   const [loginHandler]   = useLoginUserMutation()
   const navigate = useNavigate()
-
 
 
 

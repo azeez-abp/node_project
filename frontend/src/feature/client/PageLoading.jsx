@@ -21,11 +21,18 @@ const PageLoading = () => {
 
   useEffect(()=>{
     if(data){
+      console.log(data, "USER")
+        if(data && data.err){
+          return   dispatch(setCurrentUser(null))
+        }
         dispatch(setCurrentUser(data.data))
         setSessionExpires(false)
         dispatch(setPageLoading(false))
     }else{
-       setSessionExpires(true)
+      setTimeout(()=>{
+        setSessionExpires(true)
+      },3000)
+     
     } 
    //dispatch(setIs404(true))
     

@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { setCookie } from '../cookie/setCookie.js';
 export const loginAuth   = (req,res,payload,secrete=null)=>{
 //const decodedToken = jwt.decode(token);
 //accessToken into header
@@ -22,15 +23,7 @@ const accessToken  = jwt.sign(payload, secrete?secrete:process.env.ACCESS_TOKEN,
   // res.cookie(process.env.COOKIE_NAME, refreshToken, { maxAge: max_age,
   //   // httpOnly: ,secure:false,signed:false
   //  });
-   res.cookie(process.env.COOKIE_NAME,refreshToken, { 
-    domain:'',
-    maxAge: max_age,
-    httpOnly:true ,
-    signed:true ,
-    sameSite:'None',// "strict",// 'lax  | None'
-    secure: true
-  });
-
+  setCookie(res,process.env.COOKIE_NAME,refreshToken,max_age)
   req.session.user  = payload   ///if you want the user to be in session
 
   return {accessToken,refreshToken}

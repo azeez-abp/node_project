@@ -14,32 +14,40 @@ import Login from './feature/client/Login';
 import ForgetPassword from './feature/client/ForgetPassword';
 import ResetPassword from './feature/client/ResetPassword';
 import PageLoading from './feature/client/PageLoading';
+import DialoguePane from './components/DialoguePane';
 
 function App() {
 
-  const {mode,is404,pageLoading,errorMessage}  = useSelector((state)=>state.global) ///use selector contain all state inside dstore 
+  const {mode,dialogue,pageLoading}  = useSelector((state)=>state.global) ///use selector contain all state inside dstore 
   //
   // reducer is a state spread into state object
 //  
-  const theme  = useMemo(()=> createTheme(themeSettings(mode))  )
+  const theme  = useMemo(()=> createTheme(themeSettings(mode)) ,[mode] )
   return ( 
     <div className="app">
+        <DialoguePane
+           dialogue  = {dialogue}
+          />
       <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+
          {!pageLoading  
          ?(
         <Routes>
-        <Route path='/'  element = {<Navigate to={'login'}  replace/>} />
+        <Route path='/'  element = {<Navigate to={'dashboard'}  replace/>} />
            <Route path='/register'  element = {<Register />} />
 
             <Route path='/login' element={<Login />}   />
             <Route path='/forget-password' element={<ForgetPassword />}   />
             <Route path='/reset-password/:email/:token' element={<ResetPassword />}   />
              {/* Outle route */}
+            
             <Route  element={<Layout />}>
            {/* The Layout contains the outlet and Every Route below represent the children */}
            <Route path='/dashboard'  element = {<Dashboard />} />
+           
+
           </Route> 
         {/* Outle route */}
           <Route path="*" element={<NotFound />} />
@@ -50,7 +58,7 @@ function App() {
          )
          }
 
-
+     
       </ThemeProvider>
       </BrowserRouter> 
      

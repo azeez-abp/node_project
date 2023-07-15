@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 LightModeOutlined,
 DarkModeOutlined,
@@ -10,9 +10,11 @@ Search,
 } from "@mui/icons-material";
 import FlexBetween from "./FlexBetween";
 import { useDispatch ,useSelector} from "react-redux";
-import {setMode} from './../state'
+import {setMode,setDialogue} from './../state'
 //import profileImage from "assets/profile.jpeg"; 
 import { Toolbar, useTheme, IconButton, InputBase,AppBar,Menu,Button,MenuItem,Avatar} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useUserLogoutMutation} from "../state/api";
 //import AppBar from '@mui/material/AppBar';
 
 ////////////////////////////////////Left of Nav
@@ -46,20 +48,61 @@ const LeftNav  = ({isSideBarOpen,setIsSideBarOpen})=>{
 const RightNav  = ()=>{
 
     const dispatch = useDispatch();
-    const {currentUser}  = useSelector((state)=>state.global)
+    const {currentUser,dialogue}  = useSelector((state)=>state.global)
+    const callback  = dialogue.callback
+    const navigate  = useNavigate()
 
     const theme = useTheme();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const [handleLogout]   = useUserLogoutMutation()
+       
     const handleClick = (event) => {
    
       setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
       setAnchorEl(null);
-    };
-    //console.log( currentUser.profile_img.match(/(?<=public).+/)[0])
+    }
 
+    const handleLogouts  =  async ()=>{
+          
+       try {
+        dispatch(setDialogue({...dialogue, open:true,close:false, callback: false,text:`The system is login you out ${currentUser.first_name}` }   )   )
+        const logout  = await handleLogout();
+        console.log(logout) 
+        if(logout.data.suc){
+          dispatch(setDialogue({...dialogue, open:true,close:false, callback: false,text:`Bye bye ${currentUser.first_name}` }   )   )
+        }
+        localStorage.removeItem("APP_ACCESS_TOKEN")
+         setTimeout(()=>{ 
+          dispatch(setDialogue({...dialogue, open:false,close:true, callback: false,text:`` }   )   )
+             navigate("/login")
+         },3000)
+     
+       } catch (error) {
+        
+       }
+    
+    }
+
+    useEffect(()=>{
+      if(dialogue.callback){
+        handleLogouts ()
+      }
+    },[callback])
+
+    const logout  = ()=>{
+
+    
+  
+        dispatch(setDialogue({...dialogue, open:true,close:false, callback: false,text:"Are you sure to logout" }   )   )
+
+
+ 
+   
+    }
+    
     return (
         <FlexBetween gap={"1.5rem"} >
           <IconButton 
@@ -92,9 +135,8 @@ const RightNav  = ()=>{
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem>
+        <MenuItem onClick={()=>navigate('/profile')}>Profile</MenuItem>
+        <MenuItem onClick={logout}>Logout</MenuItem>
       </Menu>
     </div>
         </FlexBetween>

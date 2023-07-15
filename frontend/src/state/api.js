@@ -83,6 +83,18 @@ export  const api  = createApi({
                   
             })
                 , 
+            userUpdateProfile:builder.mutation({
+                query:()=>'/client/updateProfile',
+                invalidatesTags:["ClientsProfile"],
+                method:"PUT"
+                
+
+            }),
+          
+          userLogout:builder.mutation({
+               query:()=>`/client/logout`, 
+               method:"GET"
+          }),
      
 
     })
@@ -93,6 +105,8 @@ export  const api  = createApi({
     useGetUserQuery,
     useRegisterUserMutation,
     useLoginUserMutation,
-    useUserProfileQuery
+    useUserProfileQuery,
+    useUserLogoutMutation,
+    useUserUpdateProfileMutation,
 
 }  = api

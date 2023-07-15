@@ -10,7 +10,13 @@
     is404:false,
     webToken:null,
     currentUser:null,
-    errorMessage:''
+    errorMessage:'',
+    dialogue: {
+      open :false,
+      close:true,
+      callback:false, ///no funnction to call
+      text :"Are you sure to proceed"
+    }
  } 
 
  /* 
@@ -34,22 +40,27 @@
          state.isLoading  = action.payload
     },
     setPageLoading: (state,action)=>{
-         
-      state.pageLoading  = action.payload
- },
-   setWebToken: (state,action)=>{
-       
-      state.webToken  = action.payload
- },
-  setCurrentUser: (state,action)=>{
-     
-  state.currentUser  = action.payload
-},
+          
+        state.pageLoading  = action.payload
+  },
+    setWebToken: (state,action)=>{
+        
+        state.webToken  = action.payload
+  },
+    setCurrentUser: (state,action)=>{
+      
+    state.currentUser  = action.payload
+  },
 
-setErrorMessage: (state,action)=>{
-     
-  state.errorMessage = action.payload
-},
+  setErrorMessage: (state,action)=>{
+      
+    state.errorMessage = action.payload
+  },
+
+  setDialogue:(state,action)=>{
+     // console.log(action.payload)
+     state.dialogue  = action.payload
+  },
 
     registrationStart: (state) => {
       state.loading = true;
@@ -78,6 +89,7 @@ setErrorMessage: (state,action)=>{
    setPageLoading,
    setWebToken,
    setCurrentUser,
+   setDialogue,
    registrationStart,
    registrationSuccess,
    registrationFailure,

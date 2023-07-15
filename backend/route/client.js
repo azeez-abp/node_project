@@ -7,6 +7,7 @@ import passport from 'passport'
 import { Student } from '../model/Student.js'
 import { getUserProfile } from '../controller/clients/profile.js'
 import { regenerate } from '../middleware/auth/regenerate.js'
+import { logout } from '../middleware/auth/logoutOut.js'
 const clientRoute = express.Router()
 
 
@@ -37,6 +38,8 @@ clientRoute.post('/login',login)
 passport.use(jwtPassportAuthMongoCheker()(Student))
 
 clientRoute.get('/profile',regenerate, passport.authenticate('jwt',{session:true}) ,getUserProfile)
+
+clientRoute.get('/logout',logout)
 
 /////////////////////////////Path to auth below the passport auth
 
