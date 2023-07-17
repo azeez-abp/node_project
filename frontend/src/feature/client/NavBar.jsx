@@ -122,9 +122,13 @@ const RightNav  = ()=>{
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        sx={{
+          color:"#ccc"
+        }}
       > 
 
-        <Avatar alt="Remy Sharp" src={`${process.env.REACT_APP_BASE_URL }${currentUser &&  currentUser.profile_img.match(/(?<=public).+/)[0]}`} /> {currentUser&&currentUser.first_name}
+        <Avatar alt="Remy Sharp" src={`${process.env.REACT_APP_BASE_URL }${currentUser &&  currentUser.profile_img.match(/(?<=public).+/)[0]}`} />
+          {currentUser&& "Welcome "+currentUser.first_name}
       </Button>
       <Menu
         id="basic-menu"

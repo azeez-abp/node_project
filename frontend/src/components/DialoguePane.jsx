@@ -17,8 +17,8 @@ const style = {
   boxShadow: 24,
   px: 4,
   py:2,
-  
-  color:"black"
+  color:"black",
+  borderRadius:"4px"
 };
 
 /**
