@@ -19,6 +19,7 @@ import clientRoute from './route/client.js'
 import generalRoute from './route/general.js'
 import managementRoute from './route/management.js'
 import saleRoute from './route/sales.js'
+import ProductStat  from './model/ProductStat.js'
 const mongo_url  = process.env.MONGO_URL
 const PORT  = process.env.PORT || 9292
 const MongoDBStoreSession = MongoDBStore(session);
@@ -153,17 +154,25 @@ let hasNotConnected  = true;
 var conuntime  = 0
 
 while(hasNotConnected){
-   
+   console.log(`${__dirname}/rootCA.pem`)
     async function connects(){
         await   mongoose.connect(mongo_url,{
             useNewUrlParser:true,
-            useUnifiedTopology:true
+            useUnifiedTopology:true,
+            // ssl: true,
+            // sslValidate: true,
+          
+            // authMechanism: 'MONGODB-X509',
+            // auth: { username }
+            // sslCA: `${__dirname}/rootCA.pem`  openssl req -new -newkey rsa:4096 -nodes -keyout rootCA.key -out rootCA.pem
         })
     }
 
    try { 
      connects()
+
      app.listen(PORT,()=>console.log(`http://127.0.0.1:${PORT} started`))
+
     hasNotConnected  = false
     break
    } catch (error) {
@@ -254,4 +263,5 @@ Model
       deleteMany: [Function (anonymous)],
       findOneAndUpdate: [Function (anonymous)],
       findOneAndDelete: [Function (anonymous)],
-      findOneAndRemove: [Function (anonymous)],*/
+      findOneAndRemove: [Function (anonymous)],
+    */

@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e #exit on error
-cd  frontend2
+cd  frontend
 npx create-react-app .
 if [ $? -ne 0 ]; then
     echo "npx create-react-app. return error"

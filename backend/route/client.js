@@ -8,6 +8,7 @@ import { Student } from '../model/Student.js'
 import { getUserProfile } from '../controller/clients/profile.js'
 import { regenerate } from '../middleware/auth/regenerate.js'
 import { logout } from '../middleware/auth/logoutOut.js'
+import { getProduct } from '../controller/clients/product.js'
 const clientRoute = express.Router()
 
 
@@ -16,6 +17,7 @@ const clientRoute = express.Router()
 const upl  =  new FileUploader(clientRoute,'./public/images',1200000,500000,500000,['png','jpg','gif','webp'])
  upl.getFileAndUpload('/register','img',true,[200,400], (req,res,images)=>{
   let img  = images[0].path
+  
   userRegister(req,res,img).then((data)=>{
      res.status(200).json({suc:true,message:img})
   }).catch((error)=>{
@@ -40,6 +42,8 @@ passport.use(jwtPassportAuthMongoCheker()(Student))
 clientRoute.get('/profile',regenerate, passport.authenticate('jwt',{session:true}) ,getUserProfile)
 
 clientRoute.get('/logout',logout)
+
+clientRoute.get('/product',getProduct);
 
 /////////////////////////////Path to auth below the passport auth
 
