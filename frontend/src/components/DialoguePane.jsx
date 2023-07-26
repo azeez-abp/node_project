@@ -12,7 +12,7 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: 'background.paper',
+  bgcolor: '#fff',
   border: '0px solid #000',
   boxShadow: 24,
   px: 4,
@@ -30,12 +30,11 @@ const style = {
 export default function DialoguePane({dialogue}) {
 
   const dispatch = useDispatch()
-  const   {open ,text }      = dialogue  
-  //const [open, setOpen] = React.useState(true);
+  const   {open ,text, callback}      = dialogue  
+ 
 
   const handleCallCallback = () => dispatch(setDialogue({...dialogue,callback:true}))
 
-  
   const handleClose = () => dispatch(setDialogue({...dialogue,close:true,open:false}));
   
 
@@ -77,7 +76,7 @@ export default function DialoguePane({dialogue}) {
           <Box sx={{
             float:"right"
           }}>
-          <Button onClick={handleCallCallback} >Yes</Button>
+          <Button onClick={handleCallCallback}   disabled={callback?true:false} >Yes</Button>
           <Button onClick={handleClose}>NO</Button>
           </Box>
         

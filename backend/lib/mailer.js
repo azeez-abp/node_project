@@ -1,12 +1,53 @@
-const nodemailer = require('nodemailer');
-const fs = require("fs")
-
+//const nodemailer = require('nodemailer');
+//const fs = require("fs")
+import * as nodemailer  from 'nodemailer'
+import fs from 'fs'
 import path, { dirname } from "path";
-import { configVar } from "../Config/keys/Key";
-import DKIM from "nodemailer/lib/dkim";
+//import { configVar } from "../Config/keys/Key";
+//import DKIM from "nodemailer/lib/dkim";
 //let keys:any  = configVar().MAIL_URL
 
-export const Mailer  = (from,to=[],subject,messge_content,cb)=>{
+
+const htmlTemplate  =(message,subject,from)=>`
+<body style=" font-family: Arial, sans-serif;
+background-color: #f9f9f9;
+color: #333;
+width: 100%;">
+  <div class="container" style="
+ margin:'0px auto';
+  width: 100%;
+  height: 100vh;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;">
+    <div class="header" style=" width: 100%;
+    height: 30px;
+    padding: 6px;
+    background-color: #000;
+    color: white;
+    text-align: center;
+    line-height: 2;
+    "> Email
+      from ${from} </div>
+    <h1>${subject}</h1>
+    <p>${message}</p>
+    <div class="footer" style=" width: 100%;
+    height: 30px;
+    padding: 6px;
+    background-color: #000;
+    color: white;
+    text-align: center;
+    line-height: 2;
+    ">
+      Copy right © ${new Date().getFullYear()}
+    </div>
+  </div>
+</body>
+
+`
+
+export const mailer  = (from_,to=[],subject,messge_content,cb)=>{
 
   
 
@@ -32,13 +73,13 @@ export const Mailer  = (from,to=[],subject,messge_content,cb)=>{
   let transporter = nodemailer.createTransport({
   service: "gmail",
   host: "smtp.gmail.com",
-  port: 587,
+  port: 465,
+  secure: true,
     auth: {
             user:'adioadeyoriazeez@gmail.com',
-            pass: 'mvxusifgbwlupnha'
+            pass: 'gwpbxpljjsmvrdvw'
     },
 
-    secure: true,
     // dkim: {
     //     keys: [
     //         {
@@ -58,10 +99,10 @@ export const Mailer  = (from,to=[],subject,messge_content,cb)=>{
 });
     
 let message = {
-        from: from,
-        to: to.join(','),
+        from: from_,
+        to: to,
         subject: subject,
-        html: messge_content
+        html: htmlTemplate( messge_content,subject,from_)
     }
 
      transporter.sendMail(message, function(err, info) {

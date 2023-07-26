@@ -5,8 +5,6 @@ LightModeOutlined,
 DarkModeOutlined,
 Menu as MenuIcon,
 Search,
-//SettingsOutlined,
-//ArrowDropDownOutlined,
 } from "@mui/icons-material";
 import FlexBetween from "../../components/FlexBetween";
 import { useDispatch ,useSelector} from "react-redux";
@@ -17,7 +15,13 @@ import { useNavigate } from "react-router-dom";
 import { useUserLogoutMutation} from "../../state/api";
 //import AppBar from '@mui/material/AppBar';
 
-////////////////////////////////////Left of Nav
+/**
+ * LeftNav - is the function that set the left element of the nav bar
+ * Description:  left of nav bar contain search input and menu bar
+ * @param: props destructure to get  isSideBarOpen , setIsSideBarOpen  alter isSideBarOpen value when menu bar is click 
+ * @return: JSX-element
+ 
+*/
 const LeftNav  = ({isSideBarOpen,setIsSideBarOpen})=>{
     const theme = useTheme();
     return (
@@ -41,9 +45,14 @@ const LeftNav  = ({isSideBarOpen,setIsSideBarOpen})=>{
 </FlexBetween>
     )
 }
-///////////////////////////////////////////////Left of Nav
 
 
+/**
+ * RightNav - function that set the right of the nav bar
+ * Description: it handle all function for that 
+ * set color mode, dippaly menu of profile image and logout
+ * @return: JSX eleement  for color mode icon and profile menue
+*/
 
 const RightNav  = ()=>{
 
@@ -57,20 +66,36 @@ const RightNav  = ()=>{
     const open = Boolean(anchorEl);
     const [handleLogout]   = useUserLogoutMutation()
        
+    /**
+     * handleClick - function called when profile image menu button is click
+     * Description: setAnchorEl is call to update the state of anchorEl by adding the children list to the menu
+    */
     const handleClick = (event) => {
    
       setAnchorEl(event.currentTarget);
     };
+
+    /**
+     * handleClose - function called when profile image menu button is click
+     * to clse the menu and remove the children items fro the list
+    */
     const handleClose = () => {
       setAnchorEl(null);
     }
 
-    const handleLogouts  =  async ()=>{
+    /**
+     * handleCallingLogouts - function that is called if yes button is press on dialogue JSX-Element
+     * Description:  dispatch(setDialogue) is to update some dialogue oject property  
+     * handleLogout api is called
+     * logout.data.suc check for return data is successful,  dispatch(setDialogue) is called to update dialogue state
+     * 
+     * 
+    */
+    const handleCallingLogouts  =  async ()=>{
           
        try {
         dispatch(setDialogue({...dialogue, open:true,close:false, callback: false,text:`The system is login you out ${currentUser.first_name}` }   )   )
         const logout  = await handleLogout();
-        console.log(logout) 
         if(logout.data.suc){
           dispatch(setDialogue({...dialogue, open:true,close:false, callback: false,text:`Bye bye ${currentUser.first_name}` }   )   )
         }
@@ -86,22 +111,31 @@ const RightNav  = ()=>{
     
     }
 
+    /**
+     * useEffect - call to handle calling of handleCallingLogouts function conditionaly
+     * Description: the condition is when the dialogue.callback is true 
+     * dialogue is a state with object located in ./state/index.js
+     * if the yes on JSX-Element is press, dialogue.callback is set to true
+     * and handleCallingLogouts will be call
+     */
     useEffect(()=>{
+
       if(dialogue.callback){
-        handleLogouts ()
+        handleCallingLogouts  ()
       }
+
     },[dialogue.callback])
 
+    /**
+     * logout - function call when logout list child is click under profile image
+     * Description:  dispatch(setDialogue) is called to update the state of the dialogue pane to dispaly
+    */
+
     const logout  = ()=>{
-
-    
-  
         dispatch(setDialogue({...dialogue, open:true,close:false, callback: false,text:"Are you sure to logout" }   )   )
-
-
- 
-   
     }
+    
+
     
     return (
         <FlexBetween gap={"1.5rem"} >
@@ -146,6 +180,14 @@ const RightNav  = ()=>{
         </FlexBetween>
     )
 }
+
+
+/**
+ * NavBar - function that dispaly nav bar
+ * Description: it compose of  left and right bar
+ * @return: JSX element
+*/
+
 
 function NavBar(props) {
 const {isSideBarOpen,setIsSideBarOpen} = props

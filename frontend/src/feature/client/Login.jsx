@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react';
+import React,{useState} from 'react';
 
 import Button from '@mui/material/Button';
 
@@ -13,7 +13,7 @@ import Container from '@mui/material/Container';
 import Logo from '../../components/Logo';
 import { VisibilityOffOutlined, VisibilityOutlined } from '@mui/icons-material';
 import { useSelector,useDispatch } from 'react-redux';
-import { setIsLoading,setWebToken,setCurrentUser,setPageLoading } from '../../state';
+import { setIsLoading,setWebToken,setCurrentUser } from '../../state';
 import { useNavigate } from 'react-router-dom';
 
 import { 
@@ -26,15 +26,18 @@ import {
 } from '@mui/material';
 
 import {useLoginUserMutation } from '../../state/api';
-import { crypto } from '../../lib/crypto';
+// import pkg from 'base-64';
+// const {decode: atob, encode: btoa} = pkg;
 
-import pkg from 'base-64';
-const {decode: atob, encode: btoa} = pkg;
 
+/**
+ * Login - function that handle login 
+ * @return JSX element
+*/
 export default function Login() {
   //console.log(btoa(JSON.stringify([3,4,2,0,1])))
 
-  const {isLoading,pageLoading}  = useSelector((state)=>state.global)
+  const {isLoading}  = useSelector((state)=>state.global)
   const dispath    = useDispatch()
   const [passwordHidden,setPasswordHidden] = useState(true)
   const [error,setError] = useState("")
@@ -140,7 +143,7 @@ export default function Login() {
           height:"100vh",
           alignItems:"center",
           justifyContent:"center"
-        }}s
+        }}
       >
       
         <Box

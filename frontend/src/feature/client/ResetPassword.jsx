@@ -1,34 +1,106 @@
-import React from 'react';
 
-import Button from '@mui/material/Button';
-
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-
+import React,{useState} from 'react';
+import { CircularProgress,Button,TextField,Grid,Link,Box,Typography,Container,Alert  } from '@mui/material';
+import { useSelector,useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { setIsLoading } from '../../state';
 import Logo from '../../components/Logo';
+import { useResetPasswordMutation } from '../../state/api';
 
 import { useParams } from 'react-router-dom';
 
 export default function ResetPassword() {
 
+  const {isLoading}  = useSelector((state)=>state.global)
+  const [error,setError] = useState("")
+  const [success,setSuccess]   = useState("")
+  const dispath    = useDispatch()
+  const navigate = useNavigate()
+  const [resetPasswordHaldler]    = useResetPasswordMutation()
   const { email, token } = useParams();
 
+  
+  const hasError  = (error)=>{
+    /**
+     * @param string 
+     * @returns void
+     * it will set error and remove error and loader in 3s
+    */
+    setError(error)
+    setTimeout(()=>{
+      setTimeout(setError(''),3000)
+      dispath(setIsLoading(false))
+    },2000)
+  }
+   /**
+     * @param string 
+     * @returns void
+     * it will set error and remove error and loader in 3s
+    */
+  const hasSuccess  = (error)=>{
+   
+    setSuccess(error)
+    setTimeout(()=>{
+      setTimeout(setSuccess(''),3000)
+      dispath(setIsLoading(false))
+    },2000)
+  }
+  const checkPasword  = (password,repeatPassword)=>{
+       if(password !== repeatPassword) {
+        hasError("Passwor and repreat password are not equall")
+        return  false
+       }
 
 
-  const handleSubmit = (event) => {
+       if( ! (password).match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!?]).{8,}$/) ){
+        let err  = ``
+         if(!(password).match(/[A-Z]/)) err +=`Password must constain uppercase\n`
+         if(!(password).match(/[a-z]/)) err +="Password must constain lowercase\n"
+         if(!(password).match(/[0-9]/)) err +="Password must constain digit\n"
+         if(!(password).match(/[@#$%^&+=!?]/)) err +="Password must constain special character \n"
+         if(!(password).length < 8  ) err +="Password must be eight or more character in lenght"
+
+         if(err) {
+                hasError(err)
+                return  false
+         }
+
+        
+    }
+
+      return true
+  }
+  const handleSubmit = async(event) => {
+    dispath(setIsLoading(true))
+ 
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+    
+        
+    try {
+         if(checkPasword(data.get('password'), data.get('rpassword'))){
+              let req  = await resetPasswordHaldler({
+                                                        email,token,
+                                                      rpassword: data.get('rpassword'),
+                                                      password: data.get('password'),
+                                                    })
+          if(req.error) return hasError("Unexpected error occured, try again")
+
+          if(req.data){
+            if(req.data.err)  return hasError(req.data.err)
+           return hasError(req.data.suc)
+          }
+                                                      
+        
+      }
+    
+    } catch (error) {
+      return hasError(error.message)
+    }
+   
+
+   
   };
 
   return (
@@ -46,6 +118,8 @@ export default function ResetPassword() {
          <Logo />
           <Typography component="h1" variant="h5">
              Reset Password
+             {error && (  <Alert severity="error">{error.split("\n").map((line,index)=>(<p key={index}>{line}</p>) )}</Alert>)}
+             {success && (  <Alert severity="success">{success}</Alert>)}
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
          
@@ -70,17 +144,15 @@ export default function ResetPassword() {
               id="rpassword"
               autoComplete="current-password"
             /> 
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+          
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={isLoading?true:false}
             >
-             Set Password
+             Set Password &nbsp;{isLoading &&  <CircularProgress color="success" size={23} />}
               {/* {email} {token} */}
             </Button>
             <Grid container>

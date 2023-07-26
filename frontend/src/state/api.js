@@ -95,7 +95,30 @@ export  const api  = createApi({
                query:()=>`/client/logout`, 
                method:"GET"
           }),
-     
+        
+          requestPassword:builder.mutation({
+            query: data =>{
+                    
+                return ({
+                 url: '/client/request-password',
+                 method: 'POST',
+                 body: data,
+               
+               })
+         } 
+       }),
+       resetPassword:builder.mutation({
+        query: data =>{
+                
+            return ({
+             url: '/client/reset-password',
+             method: 'PUT',
+             body: data,
+           
+           })
+     } 
+   }),
+ 
 
     })
  })
@@ -108,5 +131,7 @@ export  const api  = createApi({
     useUserProfileQuery,
     useUserLogoutMutation,
     useUserUpdateProfileMutation,
+    useRequestPasswordMutation,
+    useResetPasswordMutation
 
 }  = api

@@ -9,6 +9,8 @@ import { getUserProfile } from '../controller/clients/profile.js'
 import { regenerate } from '../middleware/auth/regenerate.js'
 import { logout } from '../middleware/auth/logoutOut.js'
 import { getProduct } from '../controller/clients/product.js'
+import { resquestPassword } from '../controller/clients/requetPassword.js'
+import { resetPasword } from '../controller/clients/resetPassword.js'
 const clientRoute = express.Router()
 
 
@@ -24,9 +26,8 @@ const upl  =  new FileUploader(clientRoute,'./public/images',1200000,500000,5000
    res.status(200).json({err:error.message})
   })
 
-
-
  })
+
 
 clientRoute.get('/user',(req,res)=>{
     res.status(200).json({"data":"WORKING USER"})
@@ -34,8 +35,8 @@ clientRoute.get('/user',(req,res)=>{
 
 clientRoute.post('/login',login)
 
-
-
+clientRoute.post('/request-password',resquestPassword)
+clientRoute.put('/reset-password',resetPasword)
 
 passport.use(jwtPassportAuthMongoCheker()(Student))
 
@@ -43,7 +44,7 @@ clientRoute.get('/profile',regenerate, passport.authenticate('jwt',{session:true
 
 clientRoute.get('/logout',logout)
 
-clientRoute.get('/product',getProduct);
+clientRoute.get('/product',regenerate, passport.authenticate('jwt',{session:true}), getProduct);
 
 /////////////////////////////Path to auth below the passport auth
 
