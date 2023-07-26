@@ -29,19 +29,20 @@ width: 100%;">
     text-align: center;
     line-height: 2;
     "> Email
-      from ${from} </div>
-    <h1>${subject}</h1>
-    <p>${message}</p>
-    <div class="footer" style=" width: 100%;
-    height: 30px;
-    padding: 6px;
-    background-color: #000;
-    color: white;
-    text-align: center;
-    line-height: 2;
-    ">
-      Copy right © ${new Date().getFullYear()}
+      from ${from} 
     </div>
+        <h1>${subject}</h1>
+        <p>${message}</p>
+      <div class="footer" style=" width: 100%;
+      height: 30px;
+      padding: 6px;
+      background-color: #000;
+      color: white;
+      text-align: center;
+      line-height: 2;
+      ">
+        Copy right © ${new Date().getFullYear()}
+      </div>
   </div>
 </body>
 
@@ -76,8 +77,8 @@ export const mailer  = (from_,to=[],subject,messge_content,cb)=>{
   port: 465,
   secure: true,
     auth: {
-            user:'adioadeyoriazeez@gmail.com',
-            pass: 'gwpbxpljjsmvrdvw'
+            user:process.env.MAIL_USER,
+            pass: process.env.MAIL_PASS
     },
 
     // dkim: {
