@@ -38,12 +38,13 @@ export default function Login() {
   //console.log(btoa(JSON.stringify([3,4,2,0,1])))
 
   const {isLoading}  = useSelector((state)=>state.global)
-  const dispath    = useDispatch()
-  const [passwordHidden,setPasswordHidden] = useState(true)
   const [error,setError] = useState("")
   const [success,setSuccess]   = useState("")
-  const [loginHandler]   = useLoginUserMutation()
+  const dispath    = useDispatch()
   const navigate = useNavigate()
+  const [passwordHidden,setPasswordHidden] = useState(true)
+  const [loginHandler]   = useLoginUserMutation()
+
 
 
 
@@ -59,13 +60,13 @@ export default function Login() {
       dispath(setIsLoading(false))
     },2000)
   }
-
-  const hasSuccess  = (error)=>{
-    /**
+   /**
      * @param string 
      * @returns void
      * it will set error and remove error and loader in 3s
     */
+  const hasSuccess  = (error)=>{
+ 
     setSuccess(error)
     setTimeout(()=>{
       setTimeout(setSuccess(''),3000)

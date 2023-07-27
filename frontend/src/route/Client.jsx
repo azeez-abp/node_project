@@ -11,6 +11,7 @@ import PageLoading from '../feature/client/PageLoading';
 import DialoguePane from '../components/DialoguePane';
 import '../App.css';
 import Product from '../feature/client/Product';
+import ProductOnTable from '../feature/client/ProductOnTable';
 
 function ClinetApp() {
 
@@ -43,6 +44,7 @@ function ClinetApp() {
            {/* The Layout contains the outlet and Every Route below represent the children */}
            <Route path='/dashboard'  element = {<Dashboard />} />
            <Route path='/product'  element = {<Product />} />
+           <Route path='/customer'  element = {<ProductOnTable />} />
            
 
           </Route> 

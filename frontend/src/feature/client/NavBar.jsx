@@ -191,7 +191,7 @@ const RightNav  = ()=>{
 
 function NavBar(props) {
 const {isSideBarOpen,setIsSideBarOpen} = props
-  console.log(props,"props")
+
 
   return (
     <AppBar  sx={{
