@@ -44,6 +44,12 @@ export  const api  = createApi({
         
               
         }),
+        getProduct:builder.query({
+          query:(id)=>`/client/product`,
+          providesTags:["products"],
+      
+            
+      }),
         registerUser: builder.mutation({
             query: initialPost => ({
               url: '/client/register',
@@ -132,6 +138,7 @@ export  const api  = createApi({
     useUserLogoutMutation,
     useUserUpdateProfileMutation,
     useRequestPasswordMutation,
-    useResetPasswordMutation
+    useResetPasswordMutation,
+    useGetProductQuery
 
 }  = api

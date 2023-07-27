@@ -89,7 +89,11 @@ export default function ResetPassword() {
 
           if(req.data){
             if(req.data.err)  return hasError(req.data.err)
-           return hasError(req.data.suc)
+             
+           hasSuccess(req.data.suc)
+           setTimeout(()=>{
+            navigate('/login')
+           },3000)
           }
                                                       
         

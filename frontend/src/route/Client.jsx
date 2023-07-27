@@ -10,6 +10,7 @@ import ResetPassword from '../feature/client/ResetPassword';
 import PageLoading from '../feature/client/PageLoading';
 import DialoguePane from '../components/DialoguePane';
 import '../App.css';
+import Product from '../feature/client/Product';
 
 function ClinetApp() {
 
@@ -41,6 +42,7 @@ function ClinetApp() {
             <Route  element={<Layout />}>
            {/* The Layout contains the outlet and Every Route below represent the children */}
            <Route path='/dashboard'  element = {<Dashboard />} />
+           <Route path='/product'  element = {<Product />} />
            
 
           </Route> 

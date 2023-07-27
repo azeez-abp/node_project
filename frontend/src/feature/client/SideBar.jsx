@@ -18,7 +18,7 @@ import {
 // ChevronLeftOutlined,
  ChevronRightOutlined,
  HomeOutlined,
- //ShoppingCartOutlined,
+ ShoppingCartOutlined,
  ReceiptLongOutlined,
  PublicOutlined,
  PointOfSaleOutlined,
@@ -63,6 +63,10 @@ function SideBar({drawerWidth,isSideBarOpen,setIsSideBarOpen,isDesktop})
         {
             text:"Client Facing",
             icon:null
+        },
+        {
+            text:"Product",
+            icon:<ShoppingCartOutlined/>
         },
         {
             text:"Customer",

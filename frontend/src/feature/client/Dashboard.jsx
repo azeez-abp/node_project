@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import { useSelector,useDispatch } from 'react-redux'
-import { setCurrentUser, setIsLoading,setPageLoading } from '../../state'
+import { setPageLoading } from '../../state'
 
 
 
 
 
 function Dashboard() {
- const  {isLoading,pageLoading}  = useSelector((state)=>state.global)
+ const  {pageLoading}  = useSelector((state)=>state.global)
  const dispatch  = useDispatch()
 
  const {currentUser}  = useSelector((state)=>state.global)

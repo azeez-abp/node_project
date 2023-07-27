@@ -1,42 +1,64 @@
 import React, { useEffect, useState } from 'react';
-import {Link, useNavigate } from 'react-router-dom';
-import { Box, Typography, Button } from '@mui/material';
-import { useDispatch ,useSelector} from 'react-redux';
+//import {useNavigate } from 'react-router-dom';
+import { Box, Typography,  } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import { useUserProfileQuery, } from '../../state/api'
-import { setCurrentUser, setIsLoading,setPageLoading } from '../../state'
+import { setCurrentUser ,setPageLoading } from '../../state'
 
 
 
 const PageLoading = () => {
-  const navigate= useNavigate();
+  //const navigate= useNavigate();
   const dispatch   = useDispatch()
+  const [hasProfile,setHasProfile]  = useState(false)
 
- const {data,isError,isSuccess}  = useUserProfileQuery()
+ const {
+  data,
+  // isError,
+  // isSucces
+  refetch
+}  =  useUserProfileQuery()
  const [sessionExpired,setSessionExpires]  = useState(false)
 
-  const handleGoBack = () => {
+/**   const handleGoBack = () => {
    
     navigate(-1); // Redirect to the previous page
-  };
+  };*/
+
 
   useEffect(()=>{
-    if(data){
-      console.log(data, "USER")
-        if(data && data.err){
-          return   dispatch(setCurrentUser(null))
-        }
+    refetch().then(userProfile=>{
+    
+       if(!userProfile.data){
+        setTimeout(()=>{
+          setSessionExpires(true)
+        },3000)
+        return
+       }
+       if(userProfile.status === 'fulfilled' ){
         dispatch(setCurrentUser(data.data))
         setSessionExpires(false)
         dispatch(setPageLoading(false))
-    }else{
-      setTimeout(()=>{
-        setSessionExpires(true)
-      },3000)
-     
-    } 
+       }
+       if(data && data.err){
+        return   dispatch(setCurrentUser(null))
+      }
+    }).catch(err=>{
+       setTimeout(()=>{
+         setSessionExpires(true)
+       },3000)
+    })
+
+
+
+
    //dispatch(setIs404(true))
     
   },[data])
+
+
+
+
   return (
     <Box textAlign="center" py={10} sx={{
         display:'flex',
