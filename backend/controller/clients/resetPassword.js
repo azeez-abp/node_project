@@ -17,8 +17,13 @@ export const resetPasword  =async (req,res)=>{
            let {salt,hashPass} = passwordFunction.genPasswordCryptoBase(password)
           let update    =  await  Student.findOneAndUpdate({email:email},{password:hashPass,salt:salt})
 
-          console.log(update)
-          if(update)  return res.json({suc:"Password reset done"}) 
+         // console.log(update)
+          if(update){
+               PasswordReset.findByIdAndDelete({email:email,token:token})
+              return res.json({suc:"Password reset done"})  
+          } else{
+               return res.json({err:"setting pasword failed"})    
+          } 
 
          } catch (error) {
                 console.log(error)

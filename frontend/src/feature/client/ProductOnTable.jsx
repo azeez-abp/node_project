@@ -12,8 +12,15 @@ import {
         useMediaQuery
  } from '@mui/material'
 
+ import {
+
+ CancelOutlined,
+ EditOutlined,
+ DeleteOutline,
+ SaveOutlined
+  } from "@mui/icons-material";
  import { DataGrid , GridToolbarContainer,
-        GridToolbarDensitySelector,} from '@mui/x-data-grid';
+        GridToolbarDensitySelector,GridToolbar,  GridActionsCellItem,  GridRowModes, } from '@mui/x-data-grid';
 
 import { useGetProductQuery } from '../../state/api'
 import GetUser from './GetUser'
@@ -25,6 +32,9 @@ function ProductOnTable() {
 
 const {data,refetch,isloading}  = useGetProductQuery()
 const [products,setProducts]  = useState(null)
+const [selectedRowIds, setSelectedRowIds] = useState([]);
+const [rowModesModel, setRowModesModel] = useState({});
+
 //console.log(data)
 
 
@@ -65,7 +75,7 @@ const columns = [
         {
           field: 'category',
           headerName: 'Category',
-          type: 'number',
+          type: 'string',
           width: 110,
           editable: true,
         },
@@ -78,6 +88,64 @@ const columns = [
         //   valueGetter: (params) =>
         //     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
         // },
+
+
+
+        //////////////////////////////
+        
+        {
+          field: 'actions',
+          type: 'actions',
+          headerName: 'Actions',
+          width: 100,
+          cellClassName: 'actions',
+          getActions: ({ id }) => {
+            console.log(rowModesModel)
+            const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+    
+            if (isInEditMode) {
+              return [
+                <GridActionsCellItem
+                  icon={<SaveOutlined />}
+                  label="Save"
+                  sx={{
+                    color: 'primary.main',
+                  }}
+                  onClick={(id)=>console.log(id,'Saveing')}
+                />,
+                <GridActionsCellItem
+                  icon={<CancelOutlined />}
+                  label="Cancel"
+                  className="textPrimary"
+                  onClick={(id)=>console.log(id,'Cnacle')}
+                  color="inherit"
+                />,
+              ];
+            }
+    
+            return [
+              <GridActionsCellItem
+                icon={<EditOutlined />}
+                label="Edit"
+                className="textPrimary"
+                onClick={(id)=>console.log(id,'Edit')}
+                color="inherit"
+              />,
+              <GridActionsCellItem
+                icon={<DeleteOutline />}
+                label="Delete"
+                onClick={(id)=>console.log(id,'Delete')}
+                color="inherit"
+              />,
+            ];
+          },
+        },
+
+      /////////////////////
+
+
+
+
       ];
 
 
@@ -95,8 +163,12 @@ function CustomToolbar() {
         );
       }
       
+   
+      const handleSelectionChange = (selectionModel) => {
+        console.log(selectionModel)
+        setSelectedRowIds(selectionModel);
+      };
     
-      console.log(formatData(data))
    
   return (
     <Box>
@@ -126,7 +198,17 @@ function CustomToolbar() {
                                                 disableRowSelectionOnClick
                                                 density="compact"
                                                 getRowId={(row) => row.id}
-                                                slots={{toolbar: CustomToolbar }}
+                                                slots={{toolbar: GridToolbar  }}
+                                                editMode="row"
+
+                                                onRowSelectionModelChange={(data)=>console.log(data,"SelectionModelChange")} // Handle selection change
+                                                selectionModel={selectedRowIds} // Pass the selected row IDs to the DataGrid
+                                                //onStateChange={(state)=>console.log(state,"onStateChange")}
+                                                onCellClick={()=>console.log("cell click")}
+                                                onRowEdit={(state)=>console.log(state,"onRowEditStop")}
+                                                onCellEditCommit={(state)=>console.log(state,"onCellEditCommit")}
+                                                onRowEditStop={(state)=>console.log(state,"onRowEditStop")}
+                                                
                                                 
                                         />
                                

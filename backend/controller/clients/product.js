@@ -46,7 +46,7 @@ export const getProduct  = async (req,res)=>{
                 },
 
                 {
-                    $limit :2    
+                    $limit :1000    
                 },
                 {
                         $sort:{name:1}
