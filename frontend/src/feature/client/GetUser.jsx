@@ -12,8 +12,9 @@ function GetUser() {
   //console.log(useUserProfileQuery())
   useEffect(()=>{
    try {
+
     if(!currentUser){
-     dispatch(setPageLoading(true))
+     dispatch(setPageLoading(true))/**this will call page loading component that get profile data*/
     }
    } catch (error) {
      console.log(error)

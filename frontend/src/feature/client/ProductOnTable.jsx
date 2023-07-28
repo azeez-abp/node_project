@@ -34,6 +34,7 @@ const {data,refetch,isloading}  = useGetProductQuery()
 const [products,setProducts]  = useState(null)
 const [selectedRowIds, setSelectedRowIds] = useState([]);
 const [rowModesModel, setRowModesModel] = useState({});
+const [rows, setRows] = useState(null);
 
 //console.log(data)
 
@@ -41,13 +42,59 @@ const [rowModesModel, setRowModesModel] = useState({});
 const isMobile  = useMediaQuery("(min-width:100px)")
         
 useEffect(()=>{
-        refetch().then(products=>{
-         // console.log(products)
-          if(products) return setProducts(products.data)
-        }).catch(error=>{
+         
+          //  if(data)   {
+          //   let data_  = data.map(({_id,name,price,category},id)=> ({id:_id,name,price,category}) )
 
-        })
+          //   return setProducts(data_ )
+          //  }else{
+          //   //reload
+          //  }
+
+        refetch().then(products=>{
+         
+           let data_  = products.data.map(({_id,name,price,category},id)=> ({id:_id,name,price,category}) )
+          
+          if(products) return setProducts(data_)
+        }).catch(error=>{
+              console.log(error)
+        }) 
+
+    
 },[])
+
+
+const handleEditClick = (id) => () => {
+ // console.log(rowModesModel,"Edit",id)
+  setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+};
+
+
+
+const handleCancelClick = (id) => () => {
+  setRowModesModel({
+    ...rowModesModel,
+    [id]: { mode: GridRowModes.View, ignoreModifications: true },
+  });
+}
+
+
+const handleSaveClick = (id) => () => {
+  setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+};
+
+const handleDeleteClick = (id) => () => {
+  setProducts(products.filter((product) =>product.id !== id));
+};
+
+
+const processRowUpdate = (newRow) => {
+  const updatedRow = { ...newRow, isNew: false };
+  setProducts(products.map((row) => (row.id === newRow.id ? updatedRow : row)));
+  console.log(updatedRow, "MEW")
+  return updatedRow;
+};
+
 
 /**
  * rem make dimension consistent across browser
@@ -96,11 +143,11 @@ const columns = [
         {
           field: 'actions',
           type: 'actions',
-          headerName: 'Actions',
+          headerName: 'Actions  <p>delete</p>',
           width: 100,
           cellClassName: 'actions',
           getActions: ({ id }) => {
-            console.log(rowModesModel)
+           // console.log(rowModesModel)
             const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
     
             if (isInEditMode) {
@@ -111,13 +158,13 @@ const columns = [
                   sx={{
                     color: 'primary.main',
                   }}
-                  onClick={(id)=>console.log(id,'Saveing')}
+                  onClick={handleSaveClick(id)}
                 />,
                 <GridActionsCellItem
                   icon={<CancelOutlined />}
                   label="Cancel"
                   className="textPrimary"
-                  onClick={(id)=>console.log(id,'Cnacle')}
+                  onClick={handleCancelClick(id)}
                   color="inherit"
                 />,
               ];
@@ -127,14 +174,16 @@ const columns = [
               <GridActionsCellItem
                 icon={<EditOutlined />}
                 label="Edit"
+                title='Edit'
                 className="textPrimary"
-                onClick={(id)=>console.log(id,'Edit')}
+                //onClick={(id)=>console.log(id,'Edit')}
+                onClick = {handleEditClick(id)}
                 color="inherit"
               />,
               <GridActionsCellItem
                 icon={<DeleteOutline />}
                 label="Delete"
-                onClick={(id)=>console.log(id,'Delete')}
+                onClick={handleDeleteClick(id) }
                 color="inherit"
               />,
             ];
@@ -143,18 +192,11 @@ const columns = [
 
       /////////////////////
 
-
-
-
       ];
 
 
-      const formatData = (data) => {
-        if(data)return  data.map(({name,price,category},id)=> ({id,name,price,category}) )
-      };
 
 
-      
 function CustomToolbar() {
         return (
           <GridToolbarContainer>
@@ -168,8 +210,7 @@ function CustomToolbar() {
         console.log(selectionModel)
         setSelectedRowIds(selectionModel);
       };
-    
-   
+  
   return (
     <Box>
     <GetUser />
@@ -189,7 +230,7 @@ function CustomToolbar() {
 
                                       <DataGrid
                                                 loading={!products}
-                                                rows={formatData(products)}
+                                                rows={products}
                                                 columns={columns}
                                                 pagination
                                                 pageSize={5}
@@ -204,10 +245,14 @@ function CustomToolbar() {
                                                 onRowSelectionModelChange={(data)=>console.log(data,"SelectionModelChange")} // Handle selection change
                                                 selectionModel={selectedRowIds} // Pass the selected row IDs to the DataGrid
                                                 //onStateChange={(state)=>console.log(state,"onStateChange")}
-                                                onCellClick={()=>console.log("cell click")}
-                                                onRowEdit={(state)=>console.log(state,"onRowEditStop")}
+                                               // onCellClick={()=>console.log("cell click")}
+                                                onRowEdit={(state,state2)=>console.log(state,"onRowEditStop",state2)}
                                                 onCellEditCommit={(state)=>console.log(state,"onCellEditCommit")}
                                                 onRowEditStop={(state)=>console.log(state,"onRowEditStop")}
+
+                                                processRowUpdate={processRowUpdate}
+                                                
+                                              
                                                 
                                                 
                                         />
