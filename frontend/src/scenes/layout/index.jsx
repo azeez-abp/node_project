@@ -3,7 +3,7 @@ import { Box,useMediaQuery } from '@mui/material'
 import { Outlet } from 'react-router-dom'
 
 import NavBar from '../../feature/client/NavBar'
-import SideBar from '../../feature/client/SideBar'
+import MiniDrawer from '../../feature/client/Drawer'
 
 // function getMinScreenWidth() {
 //   var scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -17,7 +17,8 @@ function Layout() {
    
   return (
     <Box width="100%" height="100%" display={isDesktop?"flex":"block"}>
-      {isSideBarOpen &&  (<SideBar 
+         <MiniDrawer  isDesktop={isDesktop} />
+        {/* {  (<SideBar 
            isDesktop  = {isDesktop}
            drawerWidth  = "250px"
            isSideBarOpen ={isSideBarOpen}
@@ -25,7 +26,7 @@ function Layout() {
            
 
           />
-           ) }  
+           ) }   */}
        <Box 
       //  box for top bar
         sx={
@@ -33,13 +34,13 @@ function Layout() {
                 width:"100%"
               }
             }>
-          <NavBar 
-
+          {/* <NavBar 
+            isDesktop={isDesktop}
             isSideBarOpen ={isSideBarOpen}
             setIsSideBarOpen = {setIsSideBarOpen}
            
 
-          />
+          /> */}
          
           <Outlet /> 
           {/* Outlet make children inside Layout appear */}

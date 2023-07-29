@@ -18,3 +18,4 @@ elif [ ${#string1} -eq ${#string2} ]; then
 else
     echo "String 1 is shorter than String 2."
 fi
+#https://github.com/afinesami/holberton-system_engineering-devops.git

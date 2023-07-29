@@ -5,14 +5,17 @@ LightModeOutlined,
 DarkModeOutlined,
 Menu as MenuIcon,
 Search,
+// ArrowBack,
+// ArrowForward,
 } from "@mui/icons-material";
 import FlexBetween from "../../components/FlexBetween";
 import { useDispatch ,useSelector} from "react-redux";
 import {setMode,setDialogue} from '../../state'
 //import profileImage from "assets/profile.jpeg"; 
-import { Toolbar, useTheme, IconButton, InputBase,AppBar,Menu,Button,MenuItem,Avatar} from "@mui/material";
+import { Toolbar, useTheme, IconButton, InputBase,Menu,Button,MenuItem,Avatar} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useUserLogoutMutation} from "../../state/api";
+
 //import AppBar from '@mui/material/AppBar';
 
 /**
@@ -22,27 +25,38 @@ import { useUserLogoutMutation} from "../../state/api";
  * @return: JSX-element
  
 */
-const LeftNav  = ({isSideBarOpen,setIsSideBarOpen})=>{
+export const LeftNav  = ({open,handleDrawerOpen })=>{
     const theme = useTheme();
+  
     return (
-        <FlexBetween>
-        <IconButton aria-label="" onClick={()=>setIsSideBarOpen(!isSideBarOpen) }>
-          <MenuIcon />
-          
-          
-        </IconButton>   
-       <FlexBetween  
-       backgroundColor={theme.palette.background.alt} 
-       borderRadius={"9px"}
-       gap={"3rem"}
-       p={"0.1rem 1.5rem"}
-        >
-        <InputBase placeholder="Search...." />
-        <IconButton>
-           <Search />
-        </IconButton>
-       </FlexBetween>
-</FlexBetween>
+      <Toolbar>
+      <IconButton
+       
+        aria-label="open drawer"
+        onClick={handleDrawerOpen}
+        edge="start"
+        sx={{
+          marginRight: 5,
+          ...(open && { display: 'none' }),
+        }}
+      >
+        <MenuIcon />
+      </IconButton>
+    
+
+      <FlexBetween  
+            backgroundColor={theme.palette.background.alt} 
+            borderRadius={"9px"}
+            gap={"3rem"}
+            p={"0.1rem 1.5rem"}
+    > 
+
+    <InputBase placeholder="Search...." />
+    <IconButton>
+       <Search />
+    </IconButton>
+   </FlexBetween>
+    </Toolbar>
     )
 }
 
@@ -54,7 +68,7 @@ const LeftNav  = ({isSideBarOpen,setIsSideBarOpen})=>{
  * @return: JSX eleement  for color mode icon and profile menue
 */
 
-const RightNav  = ()=>{
+export const RightNav  = ()=>{
 
     const dispatch = useDispatch();
     const {currentUser,dialogue}  = useSelector((state)=>state.global)
@@ -181,39 +195,3 @@ const RightNav  = ()=>{
     )
 }
 
-
-/**
- * NavBar - function that dispaly nav bar
- * Description: it compose of  left and right bar
- * @return: JSX element
-*/
-
-
-function NavBar(props) {
-const {isSideBarOpen,setIsSideBarOpen} = props
-
-
-  return (
-    <AppBar  sx={{
-        position:"static",
-        background:"none",
-        boxShadow:"none",
-        width:"100%"
-
-    }}>
-
-    <Toolbar sx={{justifyContent:"space-between"}} >
-      <LeftNav  
-       isSideBarOpen = {isSideBarOpen}
-       setIsSideBarOpen  ={setIsSideBarOpen}
-
-      />
-      <RightNav />
-       
-    </Toolbar>
-
-    </AppBar>
-  )
-}
-
-export default NavBar

@@ -9,7 +9,10 @@ import {
         Typography,
         Rating,
         useTheme,
-        useMediaQuery
+        useMediaQuery,
+        TextField,
+        InputAdornment,
+        IconButton
  } from '@mui/material'
 
  import {
@@ -17,7 +20,8 @@ import {
  CancelOutlined,
  EditOutlined,
  DeleteOutline,
- SaveOutlined
+ SaveOutlined,
+ SearchOutlined
   } from "@mui/icons-material";
  import { DataGrid , GridToolbarContainer,
         GridToolbarDensitySelector,GridToolbar,  GridActionsCellItem,  GridRowModes, } from '@mui/x-data-grid';
@@ -28,39 +32,41 @@ import GetUser from './GetUser'
 
 
 
+
+
+
+
+
+
+
 function ProductOnTable() {
 
 const {data,refetch,isloading}  = useGetProductQuery()
 const [products,setProducts]  = useState(null)
 const [selectedRowIds, setSelectedRowIds] = useState([]);
 const [rowModesModel, setRowModesModel] = useState({});
-const [rows, setRows] = useState(null);
+//const [searchValue,setSearchValue]   = useState("")
+
+
 
 //console.log(data)
-
-
-const isMobile  = useMediaQuery("(min-width:100px)")
-        
-useEffect(()=>{
-         
-          //  if(data)   {
-          //   let data_  = data.map(({_id,name,price,category},id)=> ({id:_id,name,price,category}) )
-
-          //   return setProducts(data_ )
-          //  }else{
-          //   //reload
-          //  }
-
-        refetch().then(products=>{
-         
-           let data_  = products.data.map(({_id,name,price,category},id)=> ({id:_id,name,price,category}) )
-          
-          if(products) return setProducts(data_)
-        }).catch(error=>{
-              console.log(error)
-        }) 
+const getProductAgain  = async ()=>{
+     try {
+      let {data}    = await refetch()
+      console.log(data)
+      let data_  = data.map(({_id,name,price,category},id)=> ({id:_id,name,price,category}) )
+      setProducts(data_)
+     } catch (error) {
+       console.log(error)
+     } 
 
     
+}
+
+const isMobile  = useMediaQuery("(min-width:100px)")
+        console.log(data, "dafsaf")
+useEffect(()=>{
+  getProductAgain()
 },[])
 
 
@@ -195,13 +201,77 @@ const columns = [
       ];
 
 
+const debounce = (func, delay) => {
+  let timeoutId;
+
+  return function (...args) {
+    clearTimeout(timeoutId);
+
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}
+
+const seachTable  =  (searchValue)=>{
+  console.log(searchValue)
+   
+   let saveProductdata = data.map(({_id,name,price,category},id)=> ({id:_id,name,price,category}) );
+
+  debounce((arg)=>{
+    const filteredData = products.filter((item) =>
+    item.name.toLowerCase().includes(arg.toLowerCase()) ||
+    item.category.toLowerCase().includes(arg.toLowerCase()) ||
+    item.price.toString().includes(arg)
+  );
+   const new_product_data  = filteredData.length > 0  && arg !=='' ? filteredData : saveProductdata 
+     console.log(new_product_data,saveProductdata )
+  setProducts(new_product_data)
+
+  },3000)(searchValue)
+//   setSearchValue(value.target.value)
+//   value.target.focus()
+   
+// //  setTimeout(()=>{
+ 
+
+  
+// // console.log(filteredData)
+// // //setProducts( filteredData)
+
+// //  },3000)
+
+
+ }
 
 
 function CustomToolbar() {
         return (
-          <GridToolbarContainer>
-            <GridToolbarDensitySelector />
-          </GridToolbarContainer>
+          <Box display={'flex'} justifyContent={'space-between'}>
+           <GridToolbarContainer>
+            <GridToolbar />
+            </GridToolbarContainer>
+               {/* <Box>
+               <TextField 
+                  
+                   label={"Search"}
+                onChange={(v)=>seachTable(v.target.value)}
+                   sx={{ mb:"0.5rem", width:"15rem" , height:"14px"}}
+                   InputProps={{
+                    endAdornment:(<InputAdornment position='end'>
+                        <IconButton >
+                        <SearchOutlined/>
+                        </IconButton>
+                    </InputAdornment>)
+                   }}
+
+               /> 
+
+              
+               </Box> */}
+              
+          </Box> 
+         
         );
       }
       
@@ -214,6 +284,26 @@ function CustomToolbar() {
   return (
     <Box>
     <GetUser />
+    <Box  m={"3.5rem 2.5rem"}>
+               <TextField 
+                  
+                   label={"Search table"}
+                   placeholder='Search Table'
+                onChange={(v)=>seachTable(v.target.value)}
+                   sx={{ mb:"0.5rem", width:"15rem" , height:"14px"}}
+                   InputProps={{
+                    endAdornment:(<InputAdornment position='end'>
+                        <IconButton >
+                        <SearchOutlined/>
+                        </IconButton>
+                    </InputAdornment>)
+                   }}
+
+               /> 
+
+              
+               </Box>
+              
     <Box m={"1.5rem 2.5rem"}>
           {products? (<Box 
                                         mt={"20px"} display={"grid"} 
@@ -233,13 +323,20 @@ function CustomToolbar() {
                                                 rows={products}
                                                 columns={columns}
                                                 pagination
-                                                pageSize={5}
-                                                pageSizeOptions={[5, 10, 20,100]}
+                                           
+                                                
+                                                pageSizeOptions={[5, 10]}
+                                                {...products}
+                                                  initialState={{
+                                                                   ...products.initialState,
+                                                              pagination: { paginationModel: { pageSize: 5 } },
+                                                             }}
+
                                                 checkboxSelection
                                                 disableRowSelectionOnClick
                                                 density="compact"
                                                 getRowId={(row) => row.id}
-                                                slots={{toolbar: GridToolbar  }}
+                                                slots={{toolbar: CustomToolbar  }}
                                                 editMode="row"
 
                                                 onRowSelectionModelChange={(data)=>console.log(data,"SelectionModelChange")} // Handle selection change

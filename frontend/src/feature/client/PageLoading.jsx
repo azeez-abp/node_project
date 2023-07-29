@@ -24,37 +24,69 @@ const PageLoading = () => {
    
     navigate(-1); // Redirect to the previous page
   };*/
+   
+   const hasRetundata   = (data)=>{
+    dispatch(setCurrentUser(data.data))
+    setSessionExpires(false)
+    dispatch(setPageLoading(false))
+   }
+   
+
 
 
   useEffect(()=>{
-    refetch().then(userProfile=>{
-    
-       if(!userProfile.data){
-        setTimeout(()=>{
-          setSessionExpires(true)
-        },3000)
-        return
-       }
-       if(userProfile.status === 'fulfilled' ){
-        dispatch(setCurrentUser(data.data))
-        setSessionExpires(false)
-        dispatch(setPageLoading(false))
-       }
-       if(data && data.err){
-        return   dispatch(setCurrentUser(null))
+
+
+    const checkUserProfile  = async()=>{
+      let callTime = 0;
+      const max_cycle  = 5
+      while(callTime <  max_cycle ) 
+      {
+       
+  
+        if(data){
+          hasRetundata(data)
+          break 
+        }else{
+         
+          
+          try {
+             let {data}  =  await refetch()
+             
+             if(data.err){
+              setTimeout(()=>{
+                setSessionExpires(true)
+              },1000)
+              break
+             }else{
+              hasRetundata(data)
+              break
+             }
+
+          } catch (error) {
+            if(callTime ===  max_cycle -1 ) {
+              setTimeout(()=>{
+                setSessionExpires(true)
+              },1000)
+            }
+            
+           
+          }
+
+          console.log(data)
+          
+          //break
+  
+        }
+         console.log( callTime++)
+        callTime++
+        if(callTime ===  max_cycle -1 )  setSessionExpires(true)
+           //break
+        
       }
-    }).catch(err=>{
-       setTimeout(()=>{
-         setSessionExpires(true)
-       },3000)
-    })
-
-
-
-
-   //dispatch(setIs404(true))
-    
-  },[data])
+     }
+     checkUserProfile()
+  },[])
 
 
 

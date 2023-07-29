@@ -10,4 +10,5 @@
 * Redux for state management
 
 
-https://github.com/afinesami/holberton-system_engineering-devops.git
+# Warning 
+* Ensure you configure the appropriate cookie for production in backend/middleware/setCookie.js

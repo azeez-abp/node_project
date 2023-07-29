@@ -10,12 +10,11 @@ export const checkCookieHasExpred  =  (req, res,jwt) => {
           // Retrieve the expiration time of the cookie
           const decodedToken = jwt.decode(cookieValue);
          // 
+        
           const currentTime = Math.floor(Date.now() / 1000); // Convert current time to seconds
           const cookieExpireTime   = decodedToken.exp
           const remainingTime = cookieExpireTime - currentTime;
-      
-           
-          
+   
           // Compare the expiration time with the current time
           if (remainingTime > 0 ) {
             // Cookie has not expired

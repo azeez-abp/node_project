@@ -32,6 +32,7 @@ if (decodedToken) {
       
     }
     const cookie  = req.signedCookies || req.cookie
+   
     if(cookie) {
        if(remainingTime < 1 && checkCookieHasExpred(req,res,jwt)) return res.json({err:"Session has expired"})
     if(remainingTime < 1 && !checkCookieHasExpred(req,res,jwt)) {
