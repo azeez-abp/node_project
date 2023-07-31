@@ -12,6 +12,7 @@ import DialoguePane from '../components/DialoguePane';
 import '../App.css';
 import Product from '../feature/client/Product';
 import ProductOnTable from '../feature/client/ProductOnTable';
+import Transaction from '../feature/client/Transaction';
 
 function ClinetApp() {
 
@@ -45,6 +46,8 @@ function ClinetApp() {
            <Route path='/dashboard'  element = {<Dashboard />} />
            <Route path='/product'  element = {<Product />} />
            <Route path='/customer'  element = {<ProductOnTable />} />
+           <Route path='/transaction'  element = {<Transaction />} />
+
            
 
           </Route> 

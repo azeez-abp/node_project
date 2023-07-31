@@ -10,7 +10,7 @@ import {checkCookieHasExpred} from '../cookie/checkCookieHasExpired.js'
 export const regenerate = (req,res,next)=>{
 
 let authValue   = req.headers.authorization  || req.headers.Authorization
-   console.log(authValue,"tken") 
+  // console.log(authValue,"tken") 
 if(!authValue) return res.sendStatus(401)
 let token = authValue.split(" ")[1];
 

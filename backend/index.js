@@ -150,45 +150,46 @@ app.use((req, res, next) => {
 //
 
 
-  
-let hasNotConnected  = true;
-var conuntime  = 0
+const maxRetries = 10;
+let retryInterval = 1000; // 1 second initial retry interval
 
-while(hasNotConnected){
-   console.log(`${__dirname}/rootCA.pem`)
-    async function connects(){
-        await   mongoose.connect(mongo_url,{
-            useNewUrlParser:true,
-            useUnifiedTopology:true,
-            // ssl: true,
-            // sslValidate: true,
-          
-            // authMechanism: 'MONGODB-X509',
-            // auth: { username }
-            // sslCA: `${__dirname}/rootCA.pem`  openssl req -new -newkey rsa:4096 -nodes -keyout rootCA.key -out rootCA.pem
-        })
-    }
+function connectToDatabase() {
+  return new Promise((resolve, reject) => {
+    mongoose.connect(mongo_url, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
-   try { 
-     connects()
+    const db = mongoose.connection;
 
-     app.listen(PORT,()=>console.log(`http://127.0.0.1:${PORT} started`))
+    db.on('error', (error) => {
+      console.error('Error connecting to the database:', error.message);
+      reject(error);
+    });
 
-    hasNotConnected  = false
-    break
-   } catch (error) {
-    
-    hasNotConnected++
-    
-    if(hasNotConnected===10){
-     
-     break
-    }
-   }
-
-
-    
+    db.once('open', () => {
+      console.log('Connected to the database');
+      resolve();
+    });
+  });
 }
+
+async function startServer() {
+  try {
+    await connectToDatabase();
+    app.listen(PORT, () => console.log(`http://127.0.0.1:${PORT} started`));
+  } catch (error) {
+    retryInterval *= 2; // Exponential backoff, doubles the retry interval
+    if (retryInterval > 60000) {
+      // Limit the retry interval to 1 minute (60,000 ms)
+      retryInterval = 60000;
+    }
+    console.log(`Retrying connection in ${retryInterval / 1000} seconds...`);
+    setTimeout(startServer, retryInterval);
+  }
+}
+
+startServer();
 
 app.get('/*',(req,res)=>{
     //LogEvents.emit('error_log', `${req.path} return 404 Error`)

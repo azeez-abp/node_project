@@ -4,26 +4,20 @@ import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+
 
 import {
         //SettingsOutlined,
        // ChevronLeftOutlined,
-        ChevronRightOutlined,
+     
         HomeOutlined,
         ShoppingCartOutlined,
         ReceiptLongOutlined,
@@ -38,15 +32,16 @@ import {
         Groups2Outlined,
         TodayOutlined,
         ArrowBack,
-        Search,
+   
         ArrowForward,
+        MailOutline,
        
        
        
        } from "@mui/icons-material"
-import NavBar, { LeftNav, RightNav } from './NavBar';
-import FlexBetween from '../../components/FlexBetween';
-import { InputBase } from '@mui/material';
+import{ LeftNav, RightNav } from './NavBar';
+
+
 
 const drawerWidth = 240;
 
@@ -119,7 +114,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 
 
-const navItems = [
+let navItems = [
         {
             text:"Dashboard",
             icon:<HomeOutlined/>
@@ -141,10 +136,8 @@ const navItems = [
             text:"Transaction",
             icon:<ReceiptLongOutlined/>
         },
-        {
-            text:"Geography",
-            icon:<HomeOutlined/>
-        },
+
+       
         {
             text:"Geography",
             icon:<PublicOutlined/>
@@ -182,6 +175,68 @@ const navItems = [
             icon:<TrendingUpOutlined/>
         }
     ]
+
+  /**
+   * Dynamically adding item to sidebar list
+   */  
+const allow  = 1;
+if(allow) {
+    const len  = navItems.length-1
+       
+   const navItems2 =    [...navItems.splice(0,5), {
+                text:"Inbox",
+                icon:<MailOutline/>
+            },
+            ...navItems.splice(5,len)
+        ]
+        navItems =     [...navItems2,...navItems]
+
+     //console.log(navItems2)  
+
+            
+}
+/**
+ * Alternative way of creating sibebar list, but not use
+ */
+
+const navItemsObj  = {
+        Home : [{  text:"Dashboard",
+                   icon:<HomeOutlined/>
+                }],
+        'Client Fancing': [
+                   {
+                        text:"Product",
+                        icon:<ShoppingCartOutlined/>
+                    },
+                    {
+                        text:"Customer",
+                        icon:<Groups2Outlined/>
+                    }
+                    ,
+                    {
+                        text:"Transaction",
+                        icon:<ReceiptLongOutlined/>
+                    },
+            
+                   
+                    {
+                        text:"Geography",
+                        icon:<PublicOutlined/>
+                    }
+        ]
+
+}
+
+const workNavItems  = ()=>{
+
+    for(let i in navItemsObj){
+       console.log(i,navItemsObj[i])
+       navItemsObj[i].map(({text,icon},index)=> <></>)
+    }
+
+  
+}
+console.log(workNavItems())
 
 export default function MiniDrawer({isDesktop}) { 
 
@@ -257,11 +312,11 @@ export default function MiniDrawer({isDesktop}) {
             <ListItem key={index} 
             disablePadding 
             sx={{ display: 'block' , 
-            backgroundColor:active===text.toLocaleLowerCase()?theme.palette.secondary[300] :theme.palette.background.alt}}  
+            backgroundColor:active===text.toLowerCase()?theme.palette.secondary[300] :theme.palette.background.alt}}  
             
             onClick={()=>{
-                           icon && navigate(`/${text.toLocaleLowerCase()}`)
-                           icon && setActive(text.toLocaleLowerCase())
+                           icon && navigate(`/${text.toLowerCase()}`)
+                           icon && setActive(text.toLowerCase())
                       }  }
                >
               <ListItemButton

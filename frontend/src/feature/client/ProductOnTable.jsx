@@ -284,25 +284,26 @@ function CustomToolbar() {
   return (
     <Box>
     <GetUser />
-    <Box  m={"5rem 2.5rem"}>
-               <TextField 
+
+        <Box  m={"2.5rem 2.5rem"}>
+                  <TextField 
+                      
+                      label={"Search table"}
+                      placeholder='Search Table'
+                    onChange={(v)=>seachTable(v.target.value)}
+                      sx={{ mb:"0.5rem", width:"15rem" , height:"14px"}}
+                      InputProps={{
+                        endAdornment:(<InputAdornment position='end'>
+                            <IconButton >
+                            <SearchOutlined/>
+                            </IconButton>
+                        </InputAdornment>)
+                      }}
+
+                  /> 
+
                   
-                   label={"Search table"}
-                   placeholder='Search Table'
-                onChange={(v)=>seachTable(v.target.value)}
-                   sx={{ mb:"0.5rem", width:"15rem" , height:"14px"}}
-                   InputProps={{
-                    endAdornment:(<InputAdornment position='end'>
-                        <IconButton >
-                        <SearchOutlined/>
-                        </IconButton>
-                    </InputAdornment>)
-                   }}
-
-               /> 
-
-              
-               </Box>
+      </Box>
               
     <Box m={"1.5rem 2.5rem"}>
           {products? (<Box 

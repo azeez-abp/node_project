@@ -11,6 +11,8 @@ import { logout } from '../middleware/auth/logoutOut.js'
 import { getProduct } from '../controller/clients/product.js'
 import { resquestPassword } from '../controller/clients/requetPassword.js'
 import { resetPasword } from '../controller/clients/resetPassword.js'
+import { getTransaction } from '../controller/clients/getTransaction.js'
+import { geographics } from '../controller/clients/geographics.js'
 const clientRoute = express.Router()
 
 
@@ -45,7 +47,8 @@ clientRoute.get('/profile',regenerate, passport.authenticate('jwt',{session:true
 clientRoute.get('/logout',logout)
 
 clientRoute.get('/product',regenerate, passport.authenticate('jwt',{session:true}), getProduct);
-
+clientRoute.get('/transactions',regenerate,passport.authenticate('jwt',{session:true}), getTransaction)
+clientRoute.get('/geography',geographics)
 /////////////////////////////Path to auth below the passport auth
 
 //clientRoute.post('/profile',   (req,res)=>  jswPassportAuthMongoChekcer()(passport,Student)  )

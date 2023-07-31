@@ -18,20 +18,14 @@ function Layout() {
   return (
     <Box width="100%" height="100%" display={isDesktop?"flex":"block"}>
          <MiniDrawer  isDesktop={isDesktop} />
-        {/* {  (<SideBar 
-           isDesktop  = {isDesktop}
-           drawerWidth  = "250px"
-           isSideBarOpen ={isSideBarOpen}
-           setIsSideBarOpen = {setIsSideBarOpen}
-           
-
-          />
-           ) }   */}
+    
        <Box 
       //  box for top bar
+      className ="body-box "
         sx={
               {
-                width:"100%"
+                width:"100%",
+                margin:"80px 0"
               }
             }>
           {/* <NavBar 

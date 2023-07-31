@@ -50,32 +50,34 @@ export  const api  = createApi({
       
             
       }),
-        registerUser: builder.mutation({
-            query: initialPost => ({
-              url: '/client/register',
-              method: 'POST',
-              body: initialPost
-            })
-        })
-            , 
-            
-       loginUser: builder.mutation({
-                query: initialPost =>{
-                    
-                       return ({
-                        url: '/client/login',
-                        method: 'POST',
-                        body: initialPost,
-                        headers: {
-                            Authorization: `Bearer token`,
-                          },
-                      })
-                } 
-            }),
+      
+      userProfile: builder.query({
+        query:()=>`/client/profile`,
+        providesTags:["ClientsProfile"],///to be call automatically if the data change by mutation that reference
+        //These tags help in managing the cache behavior for the query results.
+        /*By providing tags, you have more control over the caching behavior of your queries,
+        allowing you to keep the data up-to-date and avoid unnecessary refetching when data related to a specific tag hasn't changed.*/
+        /*providesTags enables automatic cache update*/
+           /*Fro manual cache update, no need for providesTags you need to prorive asyc onQueryStarted function check it on REDUX page */
+        headers: {
+            Authorization: `Bearer ${token}`,
+            AppName:"WEB APPLICATON"
+          },
     
-            userProfile: builder.query({
-                query:()=>`/client/profile`,
-                providesTags:["ClientsProfile"],///to be call automatically if the data change by mutation that reference
+          
+    })
+        , 
+    
+          getTransation: builder.query({
+                query:({page,pageSize,sort,search})=>({
+                     url:`/client/transactions`,
+                     method:'GET',
+
+                     params:{page,pageSize,sort,search}
+
+                }),
+              
+                providesTags:["Transaction"],///to be call automatically if the data change by mutation that reference
                 //These tags help in managing the cache behavior for the query results.
                 /*By providing tags, you have more control over the caching behavior of your queries,
                 allowing you to keep the data up-to-date and avoid unnecessary refetching when data related to a specific tag hasn't changed.*/
@@ -89,6 +91,16 @@ export  const api  = createApi({
                   
             })
                 , 
+
+                registerUser: builder.mutation({
+                  query: initialPost => ({
+                    url: '/client/register',
+                    method: 'POST',
+                    body: initialPost
+                  })
+              })
+                  , 
+                  
             userUpdateProfile:builder.mutation({
                 query:()=>'/client/updateProfile',
                 invalidatesTags:["ClientsProfile"],
@@ -96,7 +108,20 @@ export  const api  = createApi({
                 
 
             }),
-          
+            
+            loginUser: builder.mutation({
+              query: initialPost =>{
+                  
+                     return ({
+                      url: '/client/login',
+                      method: 'POST',
+                      body: initialPost,
+                      headers: {
+                          Authorization: `Bearer token`,
+                        },
+                    })
+              } 
+          }),
           userLogout:builder.mutation({
                query:()=>`/client/logout`, 
                method:"GET"
@@ -139,6 +164,7 @@ export  const api  = createApi({
     useUserUpdateProfileMutation,
     useRequestPasswordMutation,
     useResetPasswordMutation,
-    useGetProductQuery
+    useGetProductQuery,
+    useGetTransationQuery
 
 }  = api
