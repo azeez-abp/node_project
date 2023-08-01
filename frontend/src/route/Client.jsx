@@ -13,6 +13,8 @@ import '../App.css';
 import Product from '../feature/client/Product';
 import ProductOnTable from '../feature/client/ProductOnTable';
 import Transaction from '../feature/client/Transaction';
+import Geographics from '../feature/client/Geographics';
+import Stat from '../feature/client/Stat';
 
 function ClinetApp() {
 
@@ -47,6 +49,8 @@ function ClinetApp() {
            <Route path='/product'  element = {<Product />} />
            <Route path='/customer'  element = {<ProductOnTable />} />
            <Route path='/transaction'  element = {<Transaction />} />
+           <Route path='/geography'  element = {<Geographics/>} />
+           <Route path='/overview'  element = {<Stat/>} />
 
            
 

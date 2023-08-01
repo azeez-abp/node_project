@@ -1,14 +1,14 @@
 import React , {useEffect, useState}from 'react'
 import { 
         Box,
-        Card,
-        CardActions,
-        CardContent,
-        Collapse,
-        Button,
-        Typography,
-        Rating,
-        useTheme,
+        // Card,
+        // CardActions,
+        // CardContent,
+        // Collapse,
+        // Button,
+        // Typography,
+        // Rating,
+        // useTheme,
         useMediaQuery,
         TextField,
         InputAdornment,
@@ -227,8 +227,10 @@ const seachTable  =  (searchValue)=>{
    const new_product_data  = filteredData.length > 0  && arg !=='' ? filteredData : saveProductdata 
      console.log(new_product_data,saveProductdata )
   setProducts(new_product_data)
-
-  },3000)(searchValue)
+    //avg of 200 - 300
+    //scroll event 50 -100
+    // search event
+  },250)(searchValue)
 //   setSearchValue(value.target.value)
 //   value.target.focus()
    
@@ -285,26 +287,7 @@ function CustomToolbar() {
     <Box>
     <GetUser />
 
-        <Box  m={"2.5rem 2.5rem"}>
-                  <TextField 
-                      
-                      label={"Search table"}
-                      placeholder='Search Table'
-                    onChange={(v)=>seachTable(v.target.value)}
-                      sx={{ mb:"0.5rem", width:"15rem" , height:"14px"}}
-                      InputProps={{
-                        endAdornment:(<InputAdornment position='end'>
-                            <IconButton >
-                            <SearchOutlined/>
-                            </IconButton>
-                        </InputAdornment>)
-                      }}
-
-                  /> 
-
-                  
-      </Box>
-              
+    
     <Box m={"1.5rem 2.5rem"}>
           {products? (<Box 
                                         mt={"20px"} display={"grid"} 
@@ -313,11 +296,28 @@ function CustomToolbar() {
                                         columnGap={"1.33%"}
                                         sx={
                                                 {  /**target all div under box div and apply style*/
-                                                   "& > div" : {gridColumn:isMobile ? undefined : "span 4"}     
+                                                   "& > div" : {gridColumn:isMobile ? undefined : "span 4"} ,
+                                                   position:"reative"  
+                                                     
                                                 }
                                         }
           
-                               >
+                               >  
+                                    <TextField 
+                      
+                                              label={"Search table"}
+                                              placeholder='Search Table'
+                                            onChange={(v)=>seachTable(v.target.value)}
+                                              sx={{ width:"15rem" , height:"14px",margin:" 3rem 0"}}
+                                              InputProps={{
+                                                endAdornment:(<InputAdornment position='end'>
+                                                    <IconButton >
+                                                    <SearchOutlined/>
+                                                    </IconButton>
+                                                </InputAdornment>)
+                                              }}
+
+                                          /> 
 
                                       <DataGrid
                                                 loading={!products}

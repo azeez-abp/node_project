@@ -35,7 +35,7 @@ export  const api  = createApi({
     }),
   // This allows server to set cookies
     reducerPath:"adminAPi",//name of the slice
-    tagTypes:['GeneralUser','ClientsProfile'],///route for get ie query
+    tagTypes:["GeneralUser","ClientsProfile","Transaction","Geographics","Statistics"],///route for get ie query ; all tage use in query
     endpoints: (builder)=>({
 
         getUser:builder.query({
@@ -92,41 +92,74 @@ export  const api  = createApi({
             })
                 , 
 
-                registerUser: builder.mutation({
-                  query: initialPost => ({
-                    url: '/client/register',
-                    method: 'POST',
-                    body: initialPost
-                  })
+                getGeographics: builder.query({
+                  query:()=>({
+                       url:`/client/geography`,
+                       method:'GET',
+  
+                  }),
+                  providesTags:["Geographics"],
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                      AppName:"WEB APPLICATON"
+                    },
+              
+                    
               })
                   , 
-                  
-            userUpdateProfile:builder.mutation({
-                query:()=>'/client/updateProfile',
-                invalidatesTags:["ClientsProfile"],
-                method:"PUT"
+                  getStat: builder.query({
+                    query:()=>({
+                         url:`/client/stat`,
+                         method:'GET',
+    
+                    }),
+                    providesTags:["Statistics"],
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        AppName:"WEB APPLICATON"
+                      },
                 
-
-            }),
-            
-            loginUser: builder.mutation({
-              query: initialPost =>{
-                  
-                     return ({
-                      url: '/client/login',
-                      method: 'POST',
-                      body: initialPost,
-                      headers: {
-                          Authorization: `Bearer token`,
-                        },
-                    })
-              } 
-          }),
+                      
+                }),
+              
+     
           userLogout:builder.mutation({
                query:()=>`/client/logout`, 
                method:"GET"
           }),
+
+          registerUser: builder.mutation({
+            query: initialPost => ({
+              url: '/client/register',
+              method: 'POST',
+              body: initialPost
+            })
+        })
+            , 
+            
+ 
         
+          userUpdateProfile:builder.mutation({
+            query:()=>'/client/updateProfile',
+            invalidatesTags:["ClientsProfile"],
+            method:"PUT"
+            
+
+        }),
+                 
+          loginUser: builder.mutation({
+            query: initialPost =>{
+                
+                   return ({
+                    url: '/client/login',
+                    method: 'POST',
+                    body: initialPost,
+                    headers: {
+                        Authorization: `Bearer token`,
+                      },
+                  })
+            } 
+        }),
           requestPassword:builder.mutation({
             query: data =>{
                     
@@ -165,6 +198,8 @@ export  const api  = createApi({
     useRequestPasswordMutation,
     useResetPasswordMutation,
     useGetProductQuery,
-    useGetTransationQuery
+    useGetTransationQuery,
+    useGetGeographicsQuery,
+    useGetStatQuery
 
 }  = api

@@ -236,7 +236,7 @@ const workNavItems  = ()=>{
 
   
 }
-console.log(workNavItems())
+//console.log(workNavItems())
 
 export default function MiniDrawer({isDesktop}) { 
 
@@ -333,11 +333,13 @@ export default function MiniDrawer({isDesktop}) {
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
                   }}
+                  
+                  title={text} 
                 >
                   {icon}
                 </ListItemIcon>)
                }
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }}  />
               </ListItemButton>
             </ListItem>
             

@@ -19,10 +19,11 @@ export const geographics  = async(req,res)=>{
         },{})
       
        const format   = Object.entries(mapLocation).map(([key,value])=>{
+        
             return {id:key, value:value}
        })
-      console.log(format)
-     res.json({user})
+   
+     res.json({data: format})
 
 }
 
