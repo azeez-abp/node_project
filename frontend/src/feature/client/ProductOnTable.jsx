@@ -111,17 +111,20 @@ const processRowUpdate = (newRow) => {
 const columns = [
         { field: 'id', 
         headerName: 'ID',
-         width: 90 
+         width: 90 ,
+         disableReorder: false
         },
         {
           field: 'name', //obj key
           headerName: 'Name',
           width: 150,
           editable: true,
+          disableReorder: false
+
         },
         {
           field: 'price',
-          headerName: 'Proce',
+          headerName: 'Price',
           width: 150,
           editable: true,
         },
@@ -324,7 +327,7 @@ function CustomToolbar() {
                                                 rows={products}
                                                 columns={columns}
                                                 pagination
-                                           
+                                                columnOrder={columns}
                                                 
                                                 pageSizeOptions={[5, 10]}
                                                 {...products}

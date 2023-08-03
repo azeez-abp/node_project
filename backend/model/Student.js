@@ -489,7 +489,28 @@ In the MongoDB aggregation pipeline, the $project stage is used to shape
 the documen will include field name and exclude field age
 
 
-The $project stage is a powerful tool that allows you to reshape and manipulate 
+The $project (give me the field i specofy) stage is a powerful tool that allows you to reshape and manipulate 
 the data during the aggregation process, making it easier to work with the data 
 in the subsequent stages of the pipeline.
+
+$unwind =>deconstruct base on array
+{
+  "_id": 1,
+  "title": "Book A",
+  "authors": ["Author X", "Author Y"]
+}
+
+$unwind: authors => will generate two documents baesd on the lenght of the element in the array
+
+{
+  "_id": 1,
+  "title": "Book A",
+  "authors": "Author X"
+}
+
+{
+  "_id": 1,
+  "title": "Book A",
+  "authors":  "Author Y"
+}
 */

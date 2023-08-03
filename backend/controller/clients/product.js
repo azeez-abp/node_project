@@ -13,6 +13,7 @@ export const getProduct  = async (req,res)=>{
 
         const productWithStat  = await Product.aggregate([
                 {
+                //  new mongoose.Types.ObjectId()
                   $addFields: {
                     _idToString: { $toString: '$_id' }, // Convert _id to string representation
                   },

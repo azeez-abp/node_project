@@ -1,4 +1,4 @@
-import { Box, FormControl, MenuItem, Select } from '@mui/material'
+import { Box, FormControl, MenuItem, Select, Typography } from '@mui/material'
 import GetUser from "./GetUser"
 import React, { useState } from 'react'
 import OverviewChart from '../../components/OverviewChart'
@@ -8,9 +8,11 @@ function Stat() {
   return (
     <Box 
    
-    height={"90vh"}
-
+    height={"70vh"}
+    padding={"5px 50px"}
+ 
     >
+    <Typography variant='h3'>Sales Overview</Typography>
        <GetUser/>
           <FormControl>
               <Select

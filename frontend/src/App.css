@@ -28,6 +28,27 @@
   color: #61dafb;
 }
 
+::-webkit-scrollbar{
+  width: 10px;
+}
+
+::-webkit-scrollbar-track{
+  background-color: #21295c;
+}
+
+::-webkit-scrollbar-thumb{
+  background-color: #21295c;
+  opacity: 1;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background-color: #061153;
+  cursor: pointer;
+  opacity: 1;
+}
+
+
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

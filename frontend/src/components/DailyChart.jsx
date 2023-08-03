@@ -1,18 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {ResponsiveLine} from  "@nivo/line"
 import { useTheme } from '@emotion/react'
 import { useMemo } from 'react'
 import { useGetStatQuery } from '../state/api'
-function OverviewChart({isDashbaord = false, view}) {
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+import { Box } from '@mui/material'
+import '../custom-datepicker.css'; 
+
+function DailyChart() {
 
   const theme = useTheme()
+  const [dateFrom,setDateFrom]  = useState("2021-01-01");
+  const [dateTo,setDateTo]   = useState("2021-12-31")
 
   const {data,isLoading} = useGetStatQuery()
     
   const [totalSalesLine,totalUnitsline]   = useMemo(()=>{ 
     if(!data) return []
-    const {monthlyData}    = data.data[0];  
-    console.log(monthlyData, "Monthdata")
+    const {dailyData}    = data.data[0];  
+   
     let totalSalesLine  = {
          id:"tatalSales",
          color:theme.palette.secondary.main,
@@ -26,37 +34,55 @@ function OverviewChart({isDashbaord = false, view}) {
  }
    
  /////format data
- const formatedeDataToSuitGraph  = Object.values(monthlyData).reduce((initial,cur)=>{
-         initial  = initial || {sales:0,units:0}
-       
-         const   {month,totalSales,totalUnits}  = cur  //destructure cur
-         const curSales  = initial.sales  + totalSales
-         const curUnits  = initial.units + totalUnits;
-         //console.log(cur,initial, "OVER", totalUnitsline.data )
-          
-         totalSalesLine.data = [
-          ...totalSalesLine.data,
-          {x:month , y:curSales}
-         ]
+  Object.values(dailyData).forEach(({date,totalSales,totalUnits})=>{
+            let dataUnit  = {x:date,y:totalUnits}
+            let dataTotal  = {x:date,y:totalSales}
+            console.log(dateFrom,date ,dateTo)
+          if(date >= (new Date(dateFrom)).toISOString().substring(0,10) && date <= (new Date(dateTo)).toISOString().substring(0,10)  ){
+               
+                totalUnitsline.data.push(dataUnit)
+                totalSalesLine.data.push( dataTotal)
+          }
 
-         totalUnitsline.data = [
-          ...totalUnitsline.data,
-          {x:month , y:curUnits}
-         ]
-
-        return {sales:curSales, units:curUnits} 
-
- },{sales:0,units:0})
+ })
 
 
    return [totalSalesLine, totalUnitsline]
-  } , [data])
+  } , [data,dateFrom,dateTo]) ///to re-render if the date chage
   
-  console.log(totalSalesLine, totalUnitsline,view)
+  console.log(totalSalesLine, totalUnitsline,)
   return (
+    <Box  height={"75vh"}  sx={{transform:"translate(50px)"}}>  
+    {/* calendar start */}
+    <Box display={"flex"} flexDirection={"row"}  >
+      <Box>
+       <DatePicker 
+       
+       selected={new Date(dateFrom)} 
+       onChange={(date) => setDateFrom(date)} 
+       dateFormat="yyyy-MM-dd"  
+       maxDate={new Date("2022-01-01")}
+       placeholderText="Select a date"
+        popperPlacement="bottom-start"
+
+        />
+        </Box>
+        <Box>
+       <DatePicker 
+       selected={new Date(dateTo)} 
+       onChange={(date) => setDateTo(date)} 
+       dateFormat="yyyy-MM-dd" 
+       maxDate={new Date( "2022-01-01")}
+       placeholderText="Select a date"
+        popperPlacement="bottom-start"
+       />
+       </Box>
+</Box>
+{/* calendar end */}
      <>{totalUnitsline && (<>
       <ResponsiveLine
-    data={view === "units" ? [totalUnitsline]: [totalSalesLine] }
+      
+    data={[ totalUnitsline ,totalSalesLine] }
     theme={{
           /**Theme impact color and enable us to see*/
                         axis: {
@@ -117,7 +143,7 @@ function OverviewChart({isDashbaord = false, view}) {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: 'Month',
+        legend: 'Date',
         legendOffset: 36,
         legendPosition: 'middle'
     }}
@@ -125,7 +151,7 @@ function OverviewChart({isDashbaord = false, view}) {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend:  view === "units" ? 'tatalUnits' : 'tatalSales',
+        legend:  'sales',
         legendOffset: -40,
         legendPosition: 'middle'
     }}
@@ -137,7 +163,7 @@ function OverviewChart({isDashbaord = false, view}) {
     useMesh={true}
     legends={[
         {
-            anchor: 'bottom-right',
+            anchor: 'top',
             direction: 'column',
             justify: false,
             translateX: 100,
@@ -163,7 +189,10 @@ function OverviewChart({isDashbaord = false, view}) {
     ]}
 />
      </>)}</>
+
+     </Box>
   )
+
 }
 
-export default OverviewChart
+export default DailyChart

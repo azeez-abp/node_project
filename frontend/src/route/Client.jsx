@@ -15,6 +15,8 @@ import ProductOnTable from '../feature/client/ProductOnTable';
 import Transaction from '../feature/client/Transaction';
 import Geographics from '../feature/client/Geographics';
 import Stat from '../feature/client/Stat';
+import Daily from '../feature/client/Daily';
+import Breakdowns from '../feature/client/Breakdown';
 
 function ClinetApp() {
 
@@ -51,6 +53,9 @@ function ClinetApp() {
            <Route path='/transaction'  element = {<Transaction />} />
            <Route path='/geography'  element = {<Geographics/>} />
            <Route path='/overview'  element = {<Stat/>} />
+           <Route path='/daily'  element = {<Daily/>} />
+           <Route path='/breakdown'  element = {<Breakdowns/>} />
+
 
            
 

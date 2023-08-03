@@ -99,6 +99,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     flexShrink: 0,
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
+
     color:theme.palette.secondary[200],
     
     ...(open && {
@@ -293,7 +294,10 @@ export default function MiniDrawer({isDesktop}) {
 
 
 
-      <Drawer variant="permanent" open={open}>
+      <Drawer 
+      variant="permanent" open={open}
+
+      >
         <DrawerHeader>
         <Box display={"flex"} alignItems={"center"} gap={"0.5rem"}>
         <Typography variant='h4' fontWeight={"bold"} >
@@ -306,7 +310,9 @@ export default function MiniDrawer({isDesktop}) {
           </Box>
         </DrawerHeader>
         <Divider />
-        <List>
+        <List
+            sx={{  backgroundColor:theme.palette.background.alt}}  
+        >
           {navItems.map(({text,icon}, index) => (
                 
             <ListItem key={index} 

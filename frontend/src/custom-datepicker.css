@@ -1,0 +1,93 @@
+/* custom-datepicker.css */
+
+/* Style the date picker container */
+/* .react-datepicker {
+        font-family: Arial, sans-serif;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        padding: 10px;
+        display: inline-block;
+      } */
+      
+      /* Style the selected date */
+      .react-datepicker__input-container input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      
+      /* Style the calendar icon */
+      .react-datepicker__input-container::after {
+        content: '\25BE';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        color: #aaa;
+        pointer-events: none;
+      }
+
+      .react-datepicker__input-container:active + .react-datepicker__input-container::after {
+        display: none;
+      }
+      
+      /* Style the calendar popup */
+      .react-datepicker__month-container {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+      }
+      
+      /* Style the days in the calendar */
+      .react-datepicker__day {
+        padding: 8px;
+        cursor: pointer;
+      }
+      
+      /* Style the selected day */
+      .react-datepicker__day--selected {
+        background-color: #007bff;
+        color: #fff;
+      }
+      
+      /* Style the day when hovering over it */
+      .react-datepicker__day--keyboard-selected,
+      .react-datepicker__day--selected:hover {
+        background-color: #0056b3;
+        color: #fff;
+      }
+      
+      /* Style the day when it is outside the current month */
+      .react-datepicker__day--outside-month {
+        color: #ccc;
+      }
+      
+      /* Style the month and year dropdowns */
+      .react-datepicker__header {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px;
+      }
+      
+      /* Style the navigation arrows */
+      .react-datepicker__navigation {
+        color: #fff;
+        font-size: 14px;
+      }
+      
+      /* Style the previous month arrow */
+      .react-datepicker__navigation--previous {
+        left: 10px;
+      }
+      
+      /* Style the next month arrow */
+      .react-datepicker__navigation--next {
+        right: 10px;
+      }
+      
