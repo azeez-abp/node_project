@@ -18,7 +18,7 @@ const accessToken  = jwt.sign(payload, secrete?secrete:process.env.ACCESS_TOKEN,
     algorithm:'HS256' 
   }
   const refreshToken  = jwt.sign(payload,secrete?secrete:process.env.REFRESH_TOKEN,optio2)
-   console.log(req.body)
+
   let max_age  = req.body.hasOwnProperty('remember')  && req.body.remember === 'true'? 24*60*60*1000*30 : 24*60*60*1000*15 
   //console.log(max_age,req.body.remember, typeof req.body.remember)
   // res.cookie(process.env.COOKIE_NAME, refreshToken, { maxAge: max_age,

@@ -6,8 +6,6 @@ import mongoose from 'mongoose'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import path from 'path'
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import { FileUploader } from './uploader/FileUploder.js'
 import passport from 'passport'
 import * as express_session from 'express-session'
@@ -20,16 +18,20 @@ import generalRoute from './route/general.js'
 import managementRoute from './route/management.js'
 import saleRoute from './route/sales.js'
 import ProductStat  from './model/ProductStat.js'
+import * as fs from  'fs'
+import {workin_dir} from './lib/dir.js'
 
+const app  = express()
+
+const  {__dirname}  = workin_dir()
 const mongo_url  = process.env.MONGO_URL
 const PORT  = process.env.PORT || 9292
 const MongoDBStoreSession = MongoDBStore(session);
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+wholeConecrion(app)
+
 /*CONFIGURSTION*/
 dotenv.config()
-const app  = express()
 
 let whitelist= [
   'http://127.0.0.1:'+PORT,
@@ -39,7 +41,9 @@ let whitelist= [
   'localhost:'+PORT
   //undefined
   ]
-var corsOptions = {
+
+let corsOptions = {
+
   origin: function (origin, callback) {
     //  
     if (whitelist.indexOf(origin) !== -1) {
@@ -50,6 +54,8 @@ var corsOptions = {
   },
   optionSuccessStatus:200,
   credentials: true,
+  /**credentials: This property is a boolean value that indicates whether the server should include credentials (e.g., cookies, HTTP authentication)
+   *  in the requests. Setting it to true allows credentials to be sent, and setting it to false prevents credentials from being sent.*/
 }
 
 
@@ -68,7 +74,7 @@ let corsOptionsDelegate  = function (req, callback) {
     throw new Error("Rejection by cors")
     //corsOptions = { origin: false } // disable CORS for this request
   }
-  callback(null, corsOptions) // callback expects two parameters: error and options
+  return callback(null, corsOptions) // callback expects two parameters: error and options
 
 }
 //app.use(cors({ origin: true,credentials:true }));
@@ -92,7 +98,10 @@ application's resources are shared with other origins. It helps prevent
 unauthorized access to sensitive resources by enforcing restrictions on cross-origin requests.
 "cross-origin", indicating that your application is willing to share its resources with other origins.
 */
-app.use(morgan("common"))//Morgan is a popular logging middleware for Node.js applications
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'output.log'), { flags: 'a' });
+
+// Use Morgan middleware to log request details to the file
+app.use(morgan('combined', { stream: accessLogStream }));
 
  app.use(  session({
   secret: process.env.MONGO_SESSION,
@@ -125,12 +134,12 @@ query string parser. This means that the parsed URL-encoded data will be represe
 
 app.set('trust proxy', true)// use req.ip to get ip
 
+//console.log(__dirname)
 
 
 app.use(express.static(path.join(__dirname,'/public')))
 app.use((req, res, next) => {
-   
- // res.header('X-XSS-Protection', '1');
+   res.header('X-XSS-Protection', '1');
   next();
 });
 //  const upl  =  new FileUploader(app,'./public/images',1200000,500000,500000,['png','jpg','gif','webp'])
@@ -140,6 +149,8 @@ app.use((req, res, next) => {
 //  })
 
  /*ROUTE*/
+
+
  app.use('/client',clientRoute)  ////client
  app.use('/general', generalRoute)
  app.use('/management',managementRoute)
@@ -149,52 +160,61 @@ app.use((req, res, next) => {
 
 //
 
-
-const maxRetries = 10;
-let retryInterval = 1000; // 1 second initial retry interval
-
-function connectToDatabase() {
-  return new Promise((resolve, reject) => {
-    mongoose.connect(mongo_url, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-
-    const db = mongoose.connection;
-
-    db.on('error', (error) => {
-      console.error('Error connecting to the database:', error.message);
-      reject(error);
-    });
-
-    db.once('open', () => {
-      console.log('Connected to the database');
-      resolve();
-    });
-  });
-}
-
-async function startServer() {
-  try {
-    await connectToDatabase();
-    app.listen(PORT, () => console.log(`http://127.0.0.1:${PORT} started`));
-  } catch (error) {
-    retryInterval *= 2; // Exponential backoff, doubles the retry interval
-    if (retryInterval > 60000) {
-      // Limit the retry interval to 1 minute (60,000 ms)
-      retryInterval = 60000;
+function wholeConecrion(app){
+    const maxRetries = 10;
+    let retryInterval = 1000; // 1 second initial retry interval
+    
+    function connectToDatabase() {
+      return new Promise((resolve, reject) => {
+        mongoose.connect(mongo_url, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
+    
+        const db = mongoose.connection;
+    
+        db.on('error', (error) => {
+          console.error('Error connecting to the database:', error.message);
+          reject(error);
+        });
+    
+        db.once('open', () => {
+          //console.log('Connected to the database');
+          resolve(true);
+        });
+      });
     }
-    console.log(`Retrying connection in ${retryInterval / 1000} seconds...`);
-    setTimeout(startServer, retryInterval);
-  }
+    
+    async function startServer() {
+      try {
+        await connectToDatabase();
+      app.listen(PORT, () =>{ 
+       // console.log(`http://127.0.0.1:${PORT} started`)
+      }  );
+      } catch (error) {
+        retryInterval *= 2; // Exponential backoff, doubles the retry interval
+        if (retryInterval > 60000) {
+          // Limit the retry interval to 1 minute (60,000 ms)
+          retryInterval = 60000;
+        }
+      // console.log(`Retrying connection in ${retryInterval / 1000} seconds...`);
+        setTimeout(startServer, retryInterval);
+      }
+    }
+    
+    startServer();
 }
 
-startServer();
+
 
 app.get('/*',(req,res)=>{
     //LogEvents.emit('error_log', `${req.path} return 404 Error`)
     res.send(`<h1>404 File not file</h1>`)
 })
+
+
+
+export default app;
 
 
 /*

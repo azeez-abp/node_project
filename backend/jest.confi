@@ -1,0 +1,11 @@
+export default  {
+        "jest": {
+          "transform": {
+        //     "^.+\\.js$": "babel-jest",
+        //     '\\.[jt]sx?$': 'babel-jest',
+           
+          }
+        }
+}
+
+

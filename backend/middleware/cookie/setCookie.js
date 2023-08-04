@@ -11,8 +11,8 @@ export const setCookie = (res,name ,values,max_age)=> {
               const setCookieHeader = res.getHeader('Set-Cookie');
 
               if (setCookieHeader) {
-                console.log('Cookie was successfully set:', setCookieHeader);
+               // console.log('Cookie was successfully set:', setCookieHeader);
               } else {
-                console.log('Failed to set cookie.');
+                //console.log('Failed to set cookie.');
               }
 }
