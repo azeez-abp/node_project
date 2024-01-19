@@ -2,7 +2,7 @@ import React from 'react'
 import GetUser from './GetUser'
 import {Box,useMediaQuery} from '@mui/material'
 import MetricsCard from '../../components/MetricsCard'
-import { useGetProductQuery } from '../../state/api'
+//import { useGetProductQuery } from '../../state/api'
 import { Email, VerifiedUser } from '@mui/icons-material'
 import OverviewChart from '../../components/OverviewChart'
 
@@ -12,7 +12,7 @@ import OverviewChart from '../../components/OverviewChart'
 function Dashboard() {
 
   const isDesktop = useMediaQuery('(min-width:600px)');
-    const {data}    = useGetProductQuery()
+  //const {data}    = useGetProductQuery()
   return (
     <div style={ isDesktop? {width:"100%", margin: "3px 3px"} :{
           width:" 90%",

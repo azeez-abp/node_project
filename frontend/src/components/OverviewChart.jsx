@@ -11,7 +11,8 @@ function OverviewChart({isDashbaord = false, view}) {
     
   const [totalSalesLine,totalUnitsline]   = useMemo(()=>{ 
     if(!data) return []
-    const {monthlyData}    = data.data[0];  
+    console.log(data, "Monthdata now")
+    const {monthlyData}    =  (data.hasOwnProperty('data') && data.data.length >0) ? data.data[0] :{monthlyData:[]};  
     console.log(monthlyData, "Monthdata")
     let totalSalesLine  = {
          id:"tatalSales",
