@@ -95,8 +95,8 @@ getFileAndUpload(url, image_input_field_name,isSingle=false,resize_image_ = [], 
       let img_validation_pass  =    this.imageValidator(filesArr)
        // console.log(img_validation_pass)
        
-      if(img_validation_pass[0][0] ==='err'){
-        return res.json( {err: `
+      if(img_validation_pass[0][0] === 'err'){
+        return res.status(400).json( {err: `
              This error occur for the following reason 
              1. Did you have image field in your form with name attribute "${image_input_field_name}? 
              2. Did you select the image?

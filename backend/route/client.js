@@ -20,13 +20,13 @@ const clientRoute = express.Router()
 //clientRoute.post('/',userRegister)
 
 const upl  =  new FileUploader(clientRoute,'./public/images',1200000,500000,500000,['png','jpg','gif','webp'])
- upl.getFileAndUpload('/register','img',true,[200,400], (req,res,images)=>{
-  let img  = images[0].path
-  
+ 
+upl.getFileAndUpload('/register','img',true,[200,400], (req,res1,images)=>{
+ 
   userRegister(req,res,img).then((data)=>{
      res.status(200).json({suc:true,message:img})
   }).catch((error)=>{
-   res.status(200).json({err:error.message})
+   res.status(400).json({err:error.message})
   })
 
  })

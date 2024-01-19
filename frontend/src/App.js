@@ -8,7 +8,7 @@ import ClinetApp from './route/Client';
 
 function App() {
 
-  const {mode}  = useSelector((state)=>state.global) ///use selector contain all state inside dstore 
+  const {mode}  = useSelector((state)=>state.global) ///use selector contain all state inside d store 
   //
   // reducer is a state spread into state object
 //  

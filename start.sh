@@ -1,11 +1,18 @@
 #!/bin/bash
 
-if [[  -d  './backend/node_modules' ]]
-        then 
-                echo "FOUND"
+script_path=$(readlink -f "$0")
+RES=${script_path%/*} #remove every after the longest /
+
+echo $RES " PATH " $script_path
+if [[ ! -d  $(pwd)'/backend/node_modules' ]]
+        then    
+               cd "$RES/backend"
+               npm  run install_dev
 else
-      echo "NOT FOUND"
+      echo "Dependency already install"
 fi
+ cd $(pwd)/backend
+ npm run dev
 
 string1="hello"
 string2="world"

@@ -6,7 +6,10 @@ import mongoose from 'mongoose'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import path from 'path'
+import { FileUploader } from './uploader/FileUploder.js'
 import passport from 'passport'
+import * as express_session from 'express-session'
+import { sessionMiddleware } from './middleware/session/session.js'
 import MongoDBStore from 'connect-mongodb-session';
 import session from 'express-session'
 import cookieParser from 'cookie-parser';
@@ -14,17 +17,16 @@ import clientRoute from './route/client.js'
 import generalRoute from './route/general.js'
 import managementRoute from './route/management.js'
 import saleRoute from './route/sales.js'
-import * as fs from  'fs'
 //import ProductStat  from './model/ProductStat.js'
-// import { FileUploader } from './uploader/FileUploder.js'
-// import * as express_session from 'express-session'
-// import { sessionMiddleware } from './middleware/session/session.js'
+import * as fs from  'fs'
 //import {workin_dir} from './lib/dir.js'
 // import { fileURLToPath } from 'url';
 // import { dirname } from 'path';
-// const __filename = fileURLToPath(import.meta.url);
 
+// const __filename = fileURLToPath(import.meta.url);
 const __dirname = process.cwd();
+
+
 const app  = express()
 const mongo_url  = process.env.MONGO_URL
 const PORT  = process.env.PORT || 9292
@@ -32,78 +34,63 @@ const MongoDBStoreSession = MongoDBStore(session);
 
 
 //static variable implementation
-// let mem = (callback=null )=>{
-//    let a = 0
-//   return ()=>{
-//     a++
-//     if (callback) callback()
-//   }
-// }
 
-// let a = mem()
-// a()
-// a()
-// a()
 
-//wholeConecrion(app)
+wholeConecrion(app)
 
 /*CONFIGURSTION*/
 dotenv.config()
 
+ let whitelist= [
+  'http://127.0.0.1:'+PORT,
+  'https://127.0.0.1:'+PORT,
+  '127.0.0.1:'+PORT,///this the the one
+  '127.0.0.1:3000/',///this the the one
+  'localhost:'+PORT
+  //undefined
+  ]
 
+let corsOptions = {
+
+  origin: function (origin, callback) {
+    //  
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS '+origin))
+    }
+  },
+  optionSuccessStatus:200,
+  credentials: true,
+  /**credentials: This property is a boolean value that indicates whether the server should include credentials (e.g., cookies, HTTP authentication)
+   *  in the requests. Setting it to true allows credentials to be sent, and setting it to false prevents credentials from being sent.*/
+}
+
+
+let corsOptionsDelegate  = function (req, callback) {
+  var corsOptions;
+ // 
+ //req.hostname,127.0.0.1 
+  
+  if (whitelist.indexOf(req.headers.host) !== - 1 || whitelist.indexOf(req.headers.referer)) {
+    
+    corsOptions = { origin: true,credentials:true } // reflect (enable) the requested origin in the CORS response
+  } else {
+      //
+
+    //  
+    throw new Error("Rejection by cors")
+    //corsOptions = { origin: false } // disable CORS for this request
+  }
+  return callback(null, corsOptions) // callback expects two parameters: error and options
+
+}
+//app.use(cors({ origin: true,credentials:true }));
+app.use(cors(corsOptionsDelegate));
 // app.use(cors({
 //   credentials: true,
 //   origin: 'http://localhost:3000',
 // }));
-/*List of server that can access this backend*/
-
-try {
-  let whitelist = [
-    'http://127.0.0.1:' + PORT,
-    'https://127.0.0.1:' + PORT,
-    '127.0.0.1:' + PORT,
-    '127.0.0.1:3000/', 
-    'localhost:' + PORT
-  ];
-  /* Nott use 
-  let corsOptions = {
-    origin: function (origin, callback) {
-      if (whitelist.indexOf(origin) !== -1) {
-        callback(null, true);
-        //return  true
-      } else {
-        callback(new Error('Not allowed by CORS ' + origin));
-      }
-    },
-    optionSuccessStatus: 200,
-    credentials: true
-  };
-  */
-  /*credentials: Indicates whether the server should
-   include credentials (e.g., cookies, HTTP 
-  authentication) in the requests.
-  */
-  let corsOptionsDelegate = function (req, callback) {
-    var corsOptions;
-    if (whitelist.indexOf(req.headers.host) !== -1 || whitelist.indexOf(req.headers.referer)) {
-      corsOptions = { origin: true, credentials: true };
-    } else {
-        throw new Error("Rejection by cors");
-      // corsOptions = { origin: false };
-    }
-  
-      return callback(null, corsOptions);
-  };
-  
-  //cors=>corsOptionsDelegate => whitelist
-  
-  app.use(cors(corsOptionsDelegate));
-} catch (error) {
-   throw new Error("Cors eroor ", +error)
-}
-
-
-
 app.use(express.json())
 /*express.json() middleware to parse incoming requests with a JSON payload.
  This middleware automatically parses the request body if the Content-Type 
@@ -126,49 +113,25 @@ if (!fs.existsSync(logDirectory)) {
   console.log(logDirectory, "does not exist", logDirectory)
 }
 
-
-
-
-const store = new MongoDBStoreSession({
-  uri: mongo_url,
-  collection: 'sessions'
-})
-
-app.use(session({
-  secret: process.env.MONGO_SESSION,
-  resave: false,
-  saveUninitialized: false,
-  store:  store
- })  
-);
-
-store.on('open',(data)=>{
-    console.log("store data: ",data)
-})
-
-store.on('error', function (error) {
-  console.error('MongoDBStoreSession Error:', error);
-});
-
-process.on('SIGINT', () => { 
-  process.exit(0)
-});
-
-if(process.env.NODE_ENV == "dev" || process.env.NODE_EN == "prod")
-{
-
-
 try {
 const accessLogStream = fs.createWriteStream(logDirectory, { flags: 'a' });
 app.use(morgan('combined', { stream: accessLogStream }));
 
 } catch (error) {
   console.log(error, " ERR MSG")
+  process.exit(1)
 }
 
-}
-
-
+ app.use(session({
+  secret: process.env.MONGO_SESSION,
+  resave: false,
+  saveUninitialized: false,
+  store:  new MongoDBStoreSession({
+  uri: mongo_url,
+  collection: 'sessions', /// will  create collection sessions
+})
+})  
+);
 
  app.use(passport.session())
  app.use(passport.initialize())
@@ -200,101 +163,96 @@ app.use((req, res, next) => {
    res.header('X-XSS-Protection', '1');
   next();
 });
-/*
-The route for file upload
- const upl  =  new FileUploader(app,'./public/images',1200000,500000,500000,['png','jpg','gif','webp'])
- upl.getFileAndUpload('/fileloader','img',true,[200,400], (req,res,images)=>{
+//  const upl  =  new FileUploader(app,'./public/images',1200000,500000,500000,['png','jpg','gif','webp'])
+//  upl.getFileAndUpload('/fileloader','img',true,[200,400], (req,res,images)=>{
  
-  res.status(200).json({suc:"Image uploald done"})
- })
- */
+//   res.status(200).json({suc:"Image uploald done"})
+//  })
 
  /*ROUTE*/
 
 
+ app.use('/client',clientRoute)  ////client
+ app.use('/general', generalRoute)
+ app.use('/management',managementRoute)
+ app.use('/sales',saleRoute)
 
 /*SET MONGOOSE*/
 
 //
 
+function wholeConecrion(app){
+    const maxRetries = 10;
+    let retryInterval = 1000; // 1 second initial retry interval
+    
+    function connectToDatabase() {
 
-const connectDB = () => {
-  return new Promise((resolve, reject) => {
-  
-    mongoose.connect(mongo_url);
-    const db = mongoose.connection;
+      return new Promise((resolve, reject) => {
+        mongoose.connect(mongo_url, {
+          // useNewUrlParser: true,
+          // useUnifiedTopology: true,
+        });
+    
+        const db = mongoose.connection;
+    
+        db.on('error', (error) => {
+          //console.error('Error connecting to the database:', error.message);
+          reject(error);
+        });
+    
+        db.once('open', () => {
+          //console.log('Connected to the database');
+          resolve(true);
+        });
+         
+        process.on('SIGINT', () => {
+          db.close(() => {
+           //console.log('MongoDB connection closed through app termination');
+            process.exit(0);
+          });
+        });
+        
+      });
 
-    db.on('error', (error) => {
-      reject(error);
-    });
-
-    db.once('open', () => {
-      resolve(true);
-    });
-
-    process.on('SIGINT', () => { //ctrl + c from terminal(tty) 
-      db.close();
-    });
-  });
-};
-
-const hasConnection = async () => {
-  let count_try = 0;
-  while (count_try < 10) {
-    try {
-      await connectDB();
-      console.log("Connected to the database");
-      return true;
-    } catch (error) {
-      count_try++;
-       //console.log(`Retry ${count_try}: Unable to connect to the database`);
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Retry after 1 second
     }
-  }
+    
+    async function startServer() {
 
- // console.log("Max tries reached. Unable to connect to the database");
-  return false;
-};
+      try {
+       let has_connected =  await connectToDatabase();
+       if (has_connected){
+        app.listen(PORT, () =>{ 
+          //console.log(`http://127.0.0.1:${PORT} started`)
+      } );
+       }
+     
 
-// ...
-
-if(process.env.NODE_ENV == "dev" || process.env.NODE_EN == "prod")
-{
-
-( async (app) => {
-  const isConnected = await hasConnection();
-
-  if (isConnected) {
-    app.listen(PORT, () => {
-      return 
-    });
-  }
-})(app)
-
+      } catch (error) {
+        retryInterval *= 2; // Exponential backoff, doubles the retry interval
+        if (retryInterval > 60000) {
+          // Limit the retry interval to 1 minute (60,000 ms)
+          retryInterval = 60000;
+        }
+      // console.log(`Retrying connection in ${retryInterval / 1000} seconds...`);
+        setTimeout(startServer, retryInterval);
+      }
+    }
+    
+    startServer();
 }
 
-app.use('/client',clientRoute)  ////client
-app.use('/general', generalRoute)
-app.use('/management',managementRoute)
-app.use('/sales',saleRoute)
 
 
 app.get('/*',(req,res)=>{
-  //LogEvents.emit('error_log', `${req.path} return 404 Error`)
-  res.send(`<h1>404 File not file</h1>`)
+    //LogEvents.emit('error_log', `${req.path} return 404 Error`)
+    res.send(`<h1>404 File not file</h1>`)
 })
-
-
-
-
 
 
 
 export default app;
 
 
-
- 
 /*
 Model
 .where('age').gte(25)

@@ -2,7 +2,7 @@ import { passwordFunction } from "../../lib/passwordGeneator.js"
 import { Student } from "../../model/Student.js"
 
 export const userRegister  =async (req,res,img) =>{
- console.log(req.body)
+// console.log(req.body)
    const {fn,mn,ln,em,pa,pn,ge} = req.body
    let {salt,hashPass} = passwordFunction.genPasswordCryptoBase(pa)
    const data  = {
@@ -25,8 +25,5 @@ export const userRegister  =async (req,res,img) =>{
 let doc = new Student(data)
 let done  = await doc.save()  
 return done
-
-
-   
 }
 

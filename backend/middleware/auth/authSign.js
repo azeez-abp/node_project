@@ -1,10 +1,16 @@
 import jwt from 'jsonwebtoken';
 import { setCookie } from '../cookie/setCookie.js';
+
+
 export const loginAuth   = (req,res,payload,secrete=null)=>{
-//const decodedToken = jwt.decode(token);
-//accessToken into header
-//refreshToen in in the cookie
-// if jsonwebtoken.sign conatains an error, PassportStrategy callback will not be called
+
+ /* 
+const decodedToken = jwt.decode(token);
+
+accessToken into header
+refreshToen in in the cookie
+if jsonwebtoken.sign conatains an error, PassportStrategy callback will not be called
+*/
 let option  = { 
     expiresIn: '10m',
     algorithm:'HS256' 

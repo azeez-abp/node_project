@@ -5,10 +5,10 @@ import React,{useEffect} from 'react'
 
 function GetUser() {
 
-  const  {pageLoading}  = useSelector((state)=>state.global)
+  const  {pageLoading,currentUser}  = useSelector((state)=>state.global)//disstructuring
   const dispatch  = useDispatch()
  
-  const {currentUser}  = useSelector((state)=>state.global)
+
   //console.log(useUserProfileQuery())
   useEffect(()=>{
    try {

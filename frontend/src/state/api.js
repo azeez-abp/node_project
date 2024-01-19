@@ -187,7 +187,7 @@ export  const api  = createApi({
     })
  })
 // use+loginUser+Mutation
-//
+// mutation & query in  createApi.endspoint
  export const {
     useGetUserQuery,
     useRegisterUserMutation,
@@ -203,3 +203,10 @@ export  const api  = createApi({
     useGetStatQuery
 
 }  = api
+
+
+/*
+ * How do we create  => createApi({})
+ * How do we use
+ * 
+ */

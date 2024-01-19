@@ -17,5 +17,4 @@
 - Redux for state management
 
 # Warning
-
 - Ensure you configure the appropriate cookie for production in backend/middleware/setCookie.js

@@ -3,23 +3,18 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
-  "directories": {
-    "lib": "lib",
-    "test": "test"
-  },
   "engines": {
-    "node": "20.11.0",
-    "npm": "10.2.4"
-  },
+    "node": "16.16.0",
+    "npm": "8.11.0"
+},
   "scripts": {
-    "test": "SET NODE_ENV=test&&npx jest --detectOpenHandles --runInBand",
-    "test2": "npx jest --detectOpenHandles --watchAll --no-cache",
-    "dev": "SET NODE_ENV=dev&&nodemon index.js "
+    "test": "npx jest",
+    "test2": "npx jest --watchAll --no-cache --detectOpenHandles",
+    "dev": "nodemon index.js "
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "keywords": [],
-  "description": "",
   "dependencies": {
     "base-64": "^1.0.0",
     "bcryptjs": "^2.4.3",
@@ -28,20 +23,23 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "country-iso-2-to-3": "^1.1.0",
-    "dotenv": "^16.3.1",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.1.4",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
-    "helmet": "^7.1.0",
-    "image-size": "^1.1.1",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.0.4",
+    "helmet": "^7.0.0",
+    "image-size": "^1.0.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongo-connect": "^0.0.6",
+    "mongoose": "^7.3.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.9.8",
-    "passport": "^0.7.0",
+    "nodemailer": "^6.9.3",
+    "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
-    "sharp": "^0.33.2"
+    "sharp": "^0.32.1"
   },
+  "description": "",
   "devDependencies": {
     "@babel/cli": "^7.22.9",
     "@babel/core": "^7.22.9",
@@ -50,7 +48,6 @@
     "@babel/register": "^7.22.5",
     "esm": "^3.2.25",
     "jest": "^29.6.2",
-    "mongodb-memory-server": "^9.1.6",
     "nodemon": "^2.0.22",
     "supertest": "^6.3.3"
   }
