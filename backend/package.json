@@ -14,8 +14,10 @@
   "scripts": {
     "test": "SET NODE_ENV=test&&npx jest --detectOpenHandles --runInBand",
     "test2": "npx jest --detectOpenHandles --watchAll --no-cache",
-    "dev": "SET NODE_ENV=dev&&nodemon index.js "
-  },
+    "dev": "SET NODE_ENV=dev&&nodemon index.js ",
+    "build": "npm install --legacy-peer-deps  --mode production"
+
+  },                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
   "author": "",
   "license": "ISC",
   "keywords": [],

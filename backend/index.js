@@ -15,14 +15,6 @@ import generalRoute from './route/general.js'
 import managementRoute from './route/management.js'
 import saleRoute from './route/sales.js'
 import * as fs from  'fs'
-//import ProductStat  from './model/ProductStat.js'
-// import { FileUploader } from './uploader/FileUploder.js'
-// import * as express_session from 'express-session'
-// import { sessionMiddleware } from './middleware/session/session.js'
-//import {workin_dir} from './lib/dir.js'
-// import { fileURLToPath } from 'url';
-// import { dirname } from 'path';
-// const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = process.cwd();
 const app  = express()
@@ -30,32 +22,7 @@ const mongo_url  = process.env.MONGO_URL
 const PORT  = process.env.PORT || 9292
 const MongoDBStoreSession = MongoDBStore(session);
 
-
-//static variable implementation
-// let mem = (callback=null )=>{
-//    let a = 0
-//   return ()=>{
-//     a++
-//     if (callback) callback()
-//   }
-// }
-
-// let a = mem()
-// a()
-// a()
-// a()
-
-//wholeConecrion(app)
-
-/*CONFIGURSTION*/
 dotenv.config()
-
-
-// app.use(cors({
-//   credentials: true,
-//   origin: 'http://localhost:3000',
-// }));
-/*List of server that can access this backend*/
 
 try {
   let whitelist = [
@@ -65,24 +32,7 @@ try {
     '127.0.0.1:3000/', 
     'localhost:' + PORT
   ];
-  /* Nott use 
-  let corsOptions = {
-    origin: function (origin, callback) {
-      if (whitelist.indexOf(origin) !== -1) {
-        callback(null, true);
-        //return  true
-      } else {
-        callback(new Error('Not allowed by CORS ' + origin));
-      }
-    },
-    optionSuccessStatus: 200,
-    credentials: true
-  };
-  */
-  /*credentials: Indicates whether the server should
-   include credentials (e.g., cookies, HTTP 
-  authentication) in the requests.
-  */
+ 
   let corsOptionsDelegate = function (req, callback) {
     var corsOptions;
     if (whitelist.indexOf(req.headers.host) !== -1 || whitelist.indexOf(req.headers.referer)) {
@@ -258,7 +208,7 @@ const hasConnection = async () => {
 
 // ...
 
-if(process.env.NODE_ENV == "dev" || process.env.NODE_EN == "prod")
+if(process.env.NODE_ENV == "dev" || process.env.NODE_EN == "production")
 {
 
 ( async (app) => {
@@ -278,17 +228,10 @@ app.use('/general', generalRoute)
 app.use('/management',managementRoute)
 app.use('/sales',saleRoute)
 
-
 app.get('/*',(req,res)=>{
   //LogEvents.emit('error_log', `${req.path} return 404 Error`)
   res.send(`<h1>404 File not file</h1>`)
 })
-
-
-
-
-
-
 
 export default app;
 
