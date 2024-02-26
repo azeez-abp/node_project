@@ -15,7 +15,7 @@ if [[ ! -f  "$RES/backend/.env" ]]
         then    
          
                    echo ".env is required"
-                   exit(1)
+                   exit
 else
       echo ".ENV FILE SET"
 fi
