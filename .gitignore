@@ -1,7 +1,5 @@
 backend/node_modules
 backend/.env
 frontend/node_modules
-frontend3
-frontend2
 backend/coverage
 backend/public/images
