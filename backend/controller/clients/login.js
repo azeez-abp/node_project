@@ -17,8 +17,8 @@ export const login = async (req, res) => {
       return res.status(400).json({ err });
     }
 
-    const user = await Student.findOne({ email: email }).select('password salt');
-
+    const user = await Student.findOne({ email: email }).select('password salt profile_img');
+  
     if (!user) {
       return res.status(400).json({ err: "Unknown user" });
     }
@@ -28,10 +28,11 @@ export const login = async (req, res) => {
     }
 
     const { accessToken } = loginAuth(req, res, { id: user._id.valueOf() });
-    
+    delete user['password']
+    delete user['salt']
     return res.status(200).json({
       suc: true,
-      user:{_id:user._id},
+      user:user,
       accessToken: coder.encode(
         [accessToken],
         process.env.ACCESS_TOKEN,
@@ -40,7 +41,7 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in login:", error);
-    return res.status(500).json({ err: "Internal Server Error" });
+    return res.status(500).json({ err: "Internal Server Error "+error.message });
   }
 };
 

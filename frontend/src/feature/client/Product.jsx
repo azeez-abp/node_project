@@ -16,7 +16,7 @@ import { useGetProductQuery } from '../../state/api'
 import GetUser from './GetUser'
 
 const ProductTag  = (productdata)=>{
- console.log(productdata.productdata)
+ //console.log(productdata.productdata)
    const {  _id,
         name,
         description,

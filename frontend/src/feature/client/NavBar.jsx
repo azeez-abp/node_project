@@ -79,7 +79,7 @@ export const RightNav  = ()=>{
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const [handleLogout]   = useUserLogoutMutation()
-       
+    console.log(currentUser, "FAILED IMAGE")
     /**
      * handleClick - function called when profile image menu button is click
      * Description: setAnchorEl is call to update the state of anchorEl by adding the children list to the menu
@@ -149,7 +149,7 @@ export const RightNav  = ()=>{
         dispatch(setDialogue({...dialogue, open:true,close:false, callback: false,text:"Are you sure to logout" }   )   )
     }
     
-
+   try {
     
     return (
         <FlexBetween gap={"1.5rem"} >
@@ -175,7 +175,7 @@ export const RightNav  = ()=>{
         }}
       > 
 
-        <Avatar alt="Remy Sharp" src={`${process.env.REACT_APP_BASE_URL }${currentUser &&  currentUser.profile_img.match(/(?<=public).+/)[0]}`} />
+        <Avatar alt="Remy Sharp" src={`${process.env.REACT_APP_BASE_URL }${ currentUser.hasOwnProperty("profile_img") &&  currentUser.profile_img.match(/(?<=public).+/)[0]}`} />
           {currentUser&& "Welcome "+currentUser.first_name}
       </Button>
       <Menu
@@ -193,5 +193,13 @@ export const RightNav  = ()=>{
     </div>
         </FlexBetween>
     )
+  }
+  catch (e){
+      console.log(currentUser)
+     window.location.reload()
+  }
+
+
+
 }
 

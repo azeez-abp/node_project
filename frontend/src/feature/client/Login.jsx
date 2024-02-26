@@ -75,7 +75,6 @@ export default function Login() {
   }
 
   const handleSubmit =async (event) => {
-      console.log(event.currentTarget)
     event.preventDefault();
     dispath(setIsLoading(true))
 
@@ -114,13 +113,12 @@ export default function Login() {
    
      dispath(setCurrentUser(login.data.user))
      localStorage.setItem("APP_ACCESS_TOKEN",JSON.stringify(login.data.accessToken) ) 
-  
+     console.log(login.data.user)
 
   ///   console.log(out)
      hasSuccess("Login done")
      dispath(setWebToken(login.data.accessToken))
-     setTimeout(() => {
-       //if(out) 
+     setTimeout(() => { 
        navigate('/dashboard')
      }, 2000);
       
