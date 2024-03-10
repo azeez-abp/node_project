@@ -89,7 +89,7 @@ MAIL_PASS=
 EOF
 )
 
-echo "$ENV_CONTENT" > "$FILE_PATH/backend/.env2"
+echo "$ENV_CONTENT" > "$FILE_PATH/backend/.env"
 echo ".env file created"
 
 read -p $'do you want to start the app\n y to start\n n to ignore\n' start
