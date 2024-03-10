@@ -2,7 +2,6 @@ import React,{useState} from 'react'
 import { Box,useMediaQuery } from '@mui/material'
 import { Outlet } from 'react-router-dom'
 
-import NavBar from '../../feature/client/NavBar'
 import MiniDrawer from '../../feature/client/Drawer'
 
 // function getMinScreenWidth() {
@@ -13,7 +12,7 @@ import MiniDrawer from '../../feature/client/Drawer'
 function Layout() {
   const isDesktop = useMediaQuery('(min-width:600px)');
   //console.log(isDesktop,getMinScreenWidth())
-  const [isSideBarOpen, setIsSideBarOpen] = useState(true)
+  // const [isSideBarOpen, setIsSideBarOpen] = useState(true)
    
   return (
     <Box width="100%" height="100%" display={isDesktop?"flex":"block"}>

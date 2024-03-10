@@ -65,7 +65,8 @@ function ClinetApp() {
        </Routes>
          )
          :(
-          <PageLoading />
+           <PageLoading />
+        
          )
          }
 

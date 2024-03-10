@@ -14,7 +14,7 @@ function Dashboard() {
   const isDesktop = useMediaQuery('(min-width:600px)');
   //const {data}    = useGetProductQuery()
   return (
-    <div style={ isDesktop? {width:"100%", margin: "3px 3px"} :{
+   <div style={ isDesktop? {width:"100%", margin: "3px 3px"} :{
           width:" 90%",
          margin: "10px 46px"
     }}>

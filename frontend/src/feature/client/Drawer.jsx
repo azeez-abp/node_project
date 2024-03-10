@@ -247,14 +247,10 @@ export default function MiniDrawer({isDesktop}) {
         const navigate  = useNavigate()
         const theme  = useTheme()// get theme and color
         const [open, setOpen] = useState(isDesktop);
-       
-   
-
-
+      
         useEffect(()=>{
-               
                 setActive(pathname.substring(1))
-            },[pathname])
+       },[pathname])
           
 
         const handleDrawerOpen = () => {
@@ -286,13 +282,6 @@ export default function MiniDrawer({isDesktop}) {
         
       </AppBar>
 
-      {/* <NavBar  open ={open} handleDrawerOpen  = {handleDrawerOpen}   />  */}
-
-
-
-
-
-
 
       <Drawer 
       variant="permanent" open={open}
@@ -309,6 +298,11 @@ export default function MiniDrawer({isDesktop}) {
           </IconButton>
           </Box>
         </DrawerHeader>
+
+
+
+
+        
         <Divider />
         <List
             sx={{  backgroundColor:theme.palette.background.alt}}  
@@ -352,30 +346,7 @@ export default function MiniDrawer({isDesktop}) {
           ))}
         </List>
         <Divider />
-        {/* <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List> */}
+        
       </Drawer>
    
     </Box>

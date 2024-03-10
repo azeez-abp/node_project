@@ -18,7 +18,9 @@ import * as fs from  'fs'
 
 const __dirname = process.cwd();
 const app  = express()
-const mongo_url  = process.env.MONGO_URL
+const mongo_url  = (process.env.MONGO_URL).length > 4 
+   ?process.env.MONGO_URL 
+   : process.env.MONGO_LOCAL
 const PORT  = process.env.PORT || 9292
 const MongoDBStoreSession = MongoDBStore(session);
 
@@ -144,8 +146,9 @@ app.set('trust proxy', true)// use req.ip to get ip
 
 //console.log(__dirname)
 
-
-app.use(express.static(path.join(__dirname,'/public')))
+let pub_path = path.join(__dirname,'/public')
+console.log(pub_path)
+app.use(express.static(pub_path))
 app.use((req, res, next) => {
    res.header('X-XSS-Protection', '1');
   next();

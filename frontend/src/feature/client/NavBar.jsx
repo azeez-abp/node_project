@@ -79,7 +79,7 @@ export const RightNav  = ()=>{
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const [handleLogout]   = useUserLogoutMutation()
-    console.log(currentUser, "FAILED IMAGE")
+ 
     /**
      * handleClick - function called when profile image menu button is click
      * Description: setAnchorEl is call to update the state of anchorEl by adding the children list to the menu
@@ -137,7 +137,6 @@ export const RightNav  = ()=>{
       if(dialogue.callback){
         handleCallingLogouts  ()
       }
-
     },[dialogue.callback])
 
     /**
@@ -151,6 +150,8 @@ export const RightNav  = ()=>{
     
    try {
     
+     let img =  currentUser.hasOwnProperty("profile_img") ? currentUser.profile_img.match(/(?<=public).+/)[0] :"/"
+     console.log(img, "img", currentUser)
     return (
         <FlexBetween gap={"1.5rem"} >
           <IconButton 
@@ -174,8 +175,10 @@ export const RightNav  = ()=>{
           color:"#ccc"
         }}
       > 
+       
+        <Avatar alt="Remy Sharp" src={`${process.env.REACT_APP_BASE_URL }${img}`} />
 
-        <Avatar alt="Remy Sharp" src={`${process.env.REACT_APP_BASE_URL }${ currentUser.hasOwnProperty("profile_img") &&  currentUser.profile_img.match(/(?<=public).+/)[0]}`} />
+        
           {currentUser&& "Welcome "+currentUser.first_name}
       </Button>
       <Menu
@@ -195,8 +198,7 @@ export const RightNav  = ()=>{
     )
   }
   catch (e){
-      console.log(currentUser)
-     window.location.reload()
+      console.log(e)
   }
 
 

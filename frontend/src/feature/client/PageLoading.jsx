@@ -10,7 +10,9 @@ import { setCurrentUser ,setPageLoading } from '../../state'
 const PageLoading = () => {
   //const navigate= useNavigate();
   const dispatch   = useDispatch()
-  const [hasProfile,setHasProfile]  = useState(false)
+  //const [hasProfile,setHasProfile]  = useState(false)
+  const [loadCount, setLoadCount] = useState(0)
+  const [loadingDot,setLoadingDot] = useState("")
 
  const {
   data,
@@ -20,46 +22,38 @@ const PageLoading = () => {
 }  =  useUserProfileQuery()
  const [sessionExpired,setSessionExpires]  = useState(false)
 
-/**   const handleGoBack = () => {
-   
-    navigate(-1); // Redirect to the previous page
-  };*/
-   
-   const hasRetundata   = (data)=>{
+
+const hasReturnData   = (data)=>{
     dispatch(setCurrentUser(data.data))
     setSessionExpires(false)
     dispatch(setPageLoading(false))
    }
    
 
-
-
-  useEffect(()=>{
-
-
-    const checkUserProfile  = async()=>{
+const checkUserProfile  = async()=>{
       let callTime = 0;
       const max_cycle  = 5
       while(callTime <  max_cycle ) 
       {
        
-  
+       
         if(data){
-          hasRetundata(data)
+          hasReturnData(data)
           break 
         }else{
          
-          
+           
           try {
              let {data}  =  await refetch()
-             
+             console.log(data, "data 2", "undefined"===data)
+              
              if(data.err){
               setTimeout(()=>{
                 setSessionExpires(true)
               },1000)
               break
              }else{
-              hasRetundata(data)
+              hasReturnData(data)
               break
              }
 
@@ -78,14 +72,41 @@ const PageLoading = () => {
           //break
   
         }
-         console.log( callTime++)
+        
         callTime++
-        if(callTime ===  max_cycle -1 )  setSessionExpires(true)
-           //break
+        setLoadCount(callTime)
+        if(loadCount ===  max_cycle -1 )
+        {
+            break
+        }else{
+           setSessionExpires(true)
+        }
+
+  
         
       }
      }
-     checkUserProfile()
+
+
+  useEffect(()=>{
+     /**
+      * Handle doting in loading
+      */
+      let dotCount = 1;
+      setInterval(()=>{
+        dotCount++
+        let  dot = ""
+         for (let i = 0; i < dotCount; i++) {
+          dot +="."
+          
+         }
+        setLoadingDot(dot)
+        if(dotCount === 5) dotCount =1
+      },200)
+     /**
+      * Checking user profile
+      */
+    checkUserProfile()
   },[])
 
 
@@ -105,7 +126,11 @@ const PageLoading = () => {
         sessionExpired?(<Box>
               <Typography variant='h4'   >Session has expired.  <a href='/login'   > Login</a></Typography>
         </Box>):(  <Typography variant="h4" component="h1" gutterBottom>
-           Loading
+        <span>Loading</span>  <span style={{
+          display:"block",
+          float:"right",
+          width:"50px"
+        }}>{loadingDot}</span>
       </Typography>)
        }
     

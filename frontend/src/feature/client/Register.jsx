@@ -245,16 +245,15 @@ export default function Register() {
 /////////////////////////////////////////////////////////////////////////////////
 
 try {
-   let hasRegister  = await  registerUserHandler(data)  
+   let hasRegister  = await  registerUserHandler(data) 
+   console.log(hasRegister ) 
    if(hasRegister.error){
-    return hasError(hasRegister.error.error)
+    return hasError(hasRegister.error.data.err)
    }
    console.log(hasRegister )
    if(hasRegister.data.err){
     hasError(hasRegister.data.err)
-
     return
-    
    }
     const responseImage  =process.env.REACT_APP_BASE_URL +(hasRegister.data.message).match(/(?<=public).+/)[0]
      setRespImg(responseImage) 
@@ -278,18 +277,11 @@ try {
 
 
 } catch (error) {
+  console.log(error)
   hasError(error.message)
 }
 
 
-    
-  
-   //console.log(hasRegister.data.message )
-  
-   //console.log(responseImage)
-  
-
-   ////////////////////////////////////////////////////////////////
     
   };
   

@@ -18,3 +18,7 @@
 
 # Warning
 - Ensure you configure the appropriate cookie for production in backend/middleware/setCookie.js
+
+# Runing app
++ clone the repo
++ run env.sh file and follow the prompt

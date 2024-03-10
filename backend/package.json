@@ -15,7 +15,8 @@
     "test": "SET NODE_ENV=test&&npx jest --detectOpenHandles --runInBand",
     "test2": "npx jest --detectOpenHandles --watchAll --no-cache",
     "dev": "SET NODE_ENV=dev&&nodemon index.js ",
-    "build": "npm install --legacy-peer-deps  --mode production"
+    "build": "npm install --legacy-peer-deps  --mode production",
+    "migration":"node ./model/01-init_data_insert.js"
 
   },                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
   "author": "",

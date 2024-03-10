@@ -19,9 +19,13 @@ if [[ ! -f  "$RES/backend/.env" ]]
 else
       echo ".ENV FILE SET"
 fi
- cd "$RES/backend"
+
+cd "$RES/backend"
+npm run migration &
 npm run dev &
- cd "$RES/frontend"
+sleep 5
+
+cd "$RES/frontend"
 npm start &
 
 # string1="hello"
